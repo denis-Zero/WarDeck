@@ -1,0 +1,3590 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCG Combat Creator Pro</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      height: 100%;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .app-wrapper {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(100, 100, 100, 0.3);
+    }
+
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(100, 100, 100, 0.3);
+    }
+
+    .nav-tab {
+      flex: 1;
+      min-width: 150px;
+      padding: 15px 20px;
+      background: rgba(40, 40, 60, 0.6);
+      border: 2px solid rgba(100, 100, 100, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1em;
+      color: #c0c0c0;
+    }
+
+    .nav-tab:hover {
+      background: rgba(60, 60, 80, 0.8);
+      transform: translateY(-2px);
+      border-color: rgba(150, 150, 150, 0.6);
+    }
+
+    .nav-tab.active {
+      background: #d94343;
+      border-color: #d94343;
+      box-shadow: 0 4px 15px rgba(217, 67, 67, 0.5);
+      color: #ffffff;
+    }
+
+    .tab-content {
+      display: none;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid rgba(100, 100, 100, 0.3);
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 0.95em;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="color"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid rgba(100, 100, 100, 0.5);
+      border-radius: 8px;
+      background: rgba(20, 20, 30, 0.8);
+      color: #e0e0e0;
+      font-size: 1em;
+    }
+
+    input[type="color"] {
+      height: 80px;
+      cursor: pointer;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn {
+      padding: .9px 10px;
+      border: none;
+      border-radius: 1px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: .5em;
+      transition: all 0.3s;
+      margin: 1px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: #172898;
+      color: #ffffff;
+      border: 1px solid rgba(78, 205, 196, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #3a9d98;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(42, 125, 120, 0.6);
+    }
+
+    .btn-secondary {
+      background: #95a5a6;
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #7f8c8d;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: #ffffff;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #c0392b;
+    }
+
+    .card-type-selector {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card-type-btn {
+      flex: 1;
+      padding: 15px;
+      background: rgba(40, 40, 60, 0.6);
+      border: 2px solid rgba(100, 100, 100, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #c0c0c0;
+    }
+
+    .card-type-btn:hover {
+      background: rgba(60, 60, 80, 0.8);
+      border-color: rgba(150, 150, 150, 0.6);
+    }
+
+    .card-type-btn.active {
+      background: #722a7d;
+      border-color: #000000;
+      color: #ffffff;
+    }
+
+    .warrior-card-preview,
+    .ability-card-preview {
+      height: 200px;
+      width: 150px;
+      background: #ffffff;
+      border-radius: 0px;
+      padding: 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0);
+      margin: 20px auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .warrior-header {
+      background: linear-gradient(135deg, #00000000 0%, #00000000 100%);
+      padding: 3px 5px;
+      color: #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ability-header {
+      background: linear-gradient(135deg, #9b59b6 0%, #6c3483 100%);
+      padding: 3px 5px;
+      color: #ffffff;
+    }
+
+    .warrior-name,
+    .ability-name {
+      font-size: 0.5em;
+      font-weight: bold;
+      margin: 0;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .warrior-stats {
+      display: flex;
+      gap: 2px;
+      font-size: 0.4em;
+      font-weight: bold;
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.3);
+      padding: 1px 3px;
+      border-radius: 3px;
+    }
+
+    .card-image-container {
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-image-placeholder {
+      font-size: 1.5em;
+      opacity: 0.6;
+    }
+
+    .card-body {
+      padding: 5px;
+      background: #ffffff;
+      color: #333;
+      min-height: 40px;
+      font-size: 0.4em;
+    }
+
+    .attacks-section {
+      margin: 5px 0;
+      padding: 4px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 3px;
+    }
+
+    .attack-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      font-size: 0.85em;
+    }
+
+    .attack-item:last-child {
+      border-bottom: none;
+    }
+
+    .attack-name {
+      font-weight: bold;
+      color: #c92a2a;
+    }
+
+    .attack-damage {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .weakness-badge {
+      display: inline-block;
+      background: #e74c3c;
+      color: white;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      margin: 1px 0;
+    }
+
+    .ability-effect {
+      font-size: 0.9em;
+      line-height: 1.5;
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .ability-type-badge {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 2px 5px;
+      border-radius: 6px;
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 80px;
+      margin-top: 20px;
+    }
+
+    .card-item {
+      background: rgba(20, 20, 30, 0);
+      border: 0px solid rgba(100, 100, 100, 0);
+      border-radius: 0px;
+      padding: 1px;
+      transition: all 0.3s;
+    }
+
+    .card-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      border-color: rgba(150, 150, 150, 0.6);
+    }
+
+    .card-preview-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
+      animation: zoomIn 0.3s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .card-preview-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 9999;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .card-preview-large {
+      transform: scale(3);
+      filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.9));
+    }
+
+    .filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filters input,
+    .filters select {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .attack-editor {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .attack-editor h4 {
+      margin-top: 0;
+      color: #4ecdc4;
+    }
+
+    .attack-input-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: end;
+    }
+
+    .color-picker-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .message-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      z-index: 10000;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .ability-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(155, 89, 182, 0.2);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ability-checkbox-item:hover {
+      background: rgba(155, 89, 182, 0.3);
+      border-color: rgba(155, 89, 182, 0.5);
+    }
+
+    .ability-checkbox-item.selected {
+      background: rgb(0, 255, 13);
+      border-color: #4ecdc4;
+    }
+
+    .battle-arena {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .player-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .energy-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .energy-counter {
+      background: rgba(255, 217, 61, 0.3);
+      border: 2px solid #ffd93d;
+      padding: 5px 15px;
+      border-radius: 20px;
+      color: #ffd93d;
+    }
+
+    .warriors-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .battle-warrior-card {
+      background: #f4f4f4;
+      border-radius: 6px;
+      border: 2px solid #e8c547;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      font-size: 0.85em;
+    }
+
+    .battle-warrior-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(232, 197, 71, 0.6);
+    }
+
+    .battle-warrior-card.dead {
+      opacity: 0.3;
+      filter: grayscale(100%);
+      cursor: not-allowed;
+    }
+
+    .battle-warrior-card.active {
+      border-color: #ffd700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+
+    .battle-warrior-card.can-attack {
+      border-color: #4ecdc4;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(78, 205, 196, 0.5); }
+      50% { box-shadow: 0 0 25px rgba(78, 205, 196, 1); }
+    }
+
+    .battle-card-header {
+      background: linear-gradient(135deg, #b06bff 0%, #c92a2a 100%);
+      padding: 3px 5px;
+      color: white;
+      font-size: 0.65em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .battle-card-image {
+      width: 100%;
+      height: 45px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .battle-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+
+    .battle-card-image .icon-placeholder {
+      position: relative;
+      z-index: 1;
+    }
+
+    .battle-card-stats {
+      background: white;
+      padding: 3px;
+      display: flex;
+      justify-content: space-around;
+      font-size: 0.6em;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .battle-card-info {
+      background: white;
+      padding: 5px;
+      color: #333;
+      font-size: 0.55em;
+    }
+
+    .battle-card-attacks {
+      margin-top: 3px;
+    }
+
+    .battle-attack-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .battle-attack-item:last-child {
+      border-bottom: none;
+    }
+
+    .battle-attack-name {
+      font-weight: bold;
+      color: #c92a2a;
+      font-size: 0.9em;
+    }
+
+    .battle-attack-damage {
+      color: #e74c3c;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+
+    .battle-card-abilities {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .battle-ability-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px;
+      margin: 2px 0;
+      background: rgba(155, 89, 182, 0.1);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .battle-ability-item:hover {
+      background: rgba(155, 89, 182, 0.3);
+    }
+
+    .battle-ability-item.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .battle-ability-item.disabled:hover {
+      background: rgba(155, 89, 182, 0.1);
+    }
+
+    .battle-ability-name {
+      font-weight: bold;
+      color: #9b59b6;
+      font-size: 0.85em;
+    }
+
+    .battle-ability-value {
+      color: #4ecdc4;
+      font-weight: bold;
+      font-size: 0.85em;
+    }
+
+    .battle-log {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+
+    .log-entry {
+      padding: 8px;
+      margin: 5px 0;
+      border-left: 3px solid #4ecdc4;
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.9em;
+    }
+
+    .log-entry.damage {
+      border-left-color: #e74c3c;
+    }
+
+    .turn-indicator {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    .turn-indicator.player-turn {
+      background: rgba(78, 205, 196, 0.3);
+      border: 2px solid #4ecdc4;
+    }
+
+    .ability-card-battle {
+      width: 80px;
+      height: 110px;
+      background: linear-gradient(135deg, #9b59b6 0%, #6c3483 100%);
+      border: 2px solid #8e44ad;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .ability-card-battle:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(155, 89, 182, 0.6);
+      border-color: #a569bd;
+    }
+
+    .ability-card-battle .image-section {
+      width: 100%;
+      height: 55px;
+      background: linear-gradient(135deg, #a569bd 0%, #8e44ad 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      overflow: hidden;
+    }
+
+    .ability-card-battle .image-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ability-card-battle .info-section {
+      padding: 5px;
+      background: rgba(0, 0, 0, 0.3);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .ability-card-battle .name {
+      font-size: 0.65em;
+      color: white;
+      font-weight: bold;
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .ability-card-battle .value {
+      font-size: 0.75em;
+      color: #4ecdc4;
+      font-weight: bold;
+    }
+
+    .custom-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .custom-modal-content {
+      background: #1a1a2e;
+      border: 3px solid #4ecdc4;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .custom-modal h3 {
+      margin-top: 0;
+      color: #4ecdc4;
+      text-align: center;
+    }
+
+    .attack-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .attack-option-btn {
+      padding: 15px;
+      background: rgba(78, 205, 196, 0.2);
+      border: 2px solid #4ecdc4;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #e0e0e0;
+      font-weight: bold;
+    }
+
+    .attack-option-btn:hover {
+      background: rgba(139, 78, 205, 0.4);
+      transform: translateX(5px);
+      border-color: #7fffd4;
+    }
+
+    .attack-option-damage {
+      color: #0a48d9;
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 768px) {
+      .warriors-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      .nav-tab {
+        min-width: 80px;
+        padding: 12px 10px;
+        font-size: 0.85em;
+      }
+
+      .attack-input-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><input type="file" id="import-file-input" accept=".json" style="display: none;"> <!-- Sala de Batalha (Tela Separada) -->
+  <div id="battle-room" class="app-wrapper" style="display: none;">
+   <div class="main-container">
+    <div style="background: rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
+     <h1 style="margin: 0 0 10px 0;">⚔️ ARENA DE BATALHA</h1>
+     <p style="font-size: 1.1em; opacity: 0.9; margin: 0;">Derrote todos os guerreiros inimigos para vencer!</p>
+    </div>
+    <div class="battle-arena">
+     <div class="turn-indicator player-turn" id="turn-indicator">
+      🎲 SEU TURNO - Clique nos seus guerreiros para atacar!
+     </div><!--   rea do Inimigo -->
+     <section style="margin-bottom: 30px;">
+      <div class="player-section-header">
+       <h3 style="margin: 0;">🤖 Inimigo</h3>
+      </div>
+      <div class="energy-display"><span>⚡ Energia:</span> <span class="energy-counter" id="enemy-energy">0/20</span>
+      </div>
+      <div style="margin: 15px 0;">
+       <h4 style="margin-bottom: 10px;" id="enemy-abilities-title">✨ Habilidades (0/5)</h4>
+       <div style="display: flex; gap: 10px; flex-wrap: wrap; min-height: 120px; background: rgba(155, 89, 182, 0.1); padding: 10px; border-radius: 8px;" id="enemy-abilities"></div>
+      </div>
+      <div class="warriors-grid" id="enemy-warriors"></div>
+     </section><!-- Área do Jogador -->
+     <section>
+      <div class="player-section-header">
+       <h3 style="margin: 0;">👤 Você</h3><button class="btn btn-primary" id="end-turn-btn">⏭️ Passar Turno</button>
+      </div>
+      <div class="energy-display"><span>⚡ Energia:</span> <span class="energy-counter" id="player-energy">0/20</span>
+      </div>
+      <div style="margin: 15px 0;">
+       <h4 style="margin-bottom: 10px;" id="abilities-title">✨ Habilidades (0/5)</h4>
+       <div style="display: flex; gap:10px;flex-wrap: wrap; min-height: 120px; background: rgba(155, 89, 182, 0.1); padding: 10px; border-radius: 8px;" id="player-abilities"></div>
+      </div>
+      <div class="warriors-grid" id="player-warriors"></div>
+     </section>
+     <div class="battle-log" id="battle-log"></div>
+     <div style="text-align: center; margin-top: 20px;"><button class="btn btn-danger" id="exit-battle-btn" style="font-size: 1.1em; padding: 15px 30px;">❌ Voltar à Coleção</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="app-wrapper" id="main-app">
+   <div class="main-container">
+    <header>
+     <h1 id="game-title">TCG Combat Creator Pro</h1>
+     <p class="subtitle" id="welcome-message">Crie Guerreiros e Habilidades Épicas!</p>
+    </header>
+    <nav class="nav-tabs"><button class="nav-tab active" data-tab="editor">  ️ Editor</button> <button class="nav-tab" data-tab="collection">📚 Coleção</button> <button class="nav-tab" data-tab="battle">⚔️ Batalha</button> <button class="nav-tab" data-tab="settings">⚙️ Config</button>
+    </nav>
+    <main><!-- Editor Tab -->
+     <div class="tab-content active" id="editor">
+      <h2>Editor de Cartas</h2>
+      <div class="card-type-selector"><button class="card-type-btn active" data-type="warrior">⚔️ Guerreiro</button> <button class="card-type-btn" data-type="ability">✨ Habilidade</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 200px; gap: 30px;">
+       <div><!-- Formulário de Guerreiro -->
+        <div id="warrior-form">
+         <div class="form-group"><label for="warrior-name">Nome do Guerreiro</label> <input type="text" id="warrior-name" placeholder="Ex: Dragão de Fogo" maxlength="30">
+         </div>
+         <div class="form-group"><label for="warrior-hp">HP (30-300)</label> <input type="number" id="warrior-hp" value="100" min="30" max="300">
+         </div>
+         <div class="form-group"><label for="warrior-type">Tipo</label> <select id="warrior-type"> <option value="Fogo">🔥 Fogo</option> <option value="Água">💧 Água</option> <option value="Terra">🌍 Terra</option> <option value="Voador">🦅 Voador</option> <option value="Elétrico">⚡ Elétrico</option> <option value="Natureza">🌿 Natureza</option> <option value="Luz">✨ Luz</option> <option value="Trevas">🌑 Trevas</option> </select>
+         </div>
+         <div class="form-group"><label for="warrior-weakness">Fraqueza</label> <select id="warrior-weakness"> <option value="">Nenhuma</option> <option value="Fogo">🔥 Fogo</option> <option value="Água">💧 Água</option> <option value="Terra">🌍 Terra</option> <option value="Voador">🦅 Voador</option> <option value="Elétrico">⚡ Elétrico</option> <option value="Natureza">🌿 Natureza</option> <option value="Luz">✨ Luz</option> <option value="Trevas">🌑 Trevas</option> </select>
+         </div>
+         <div class="attack-editor">
+          <h4>⚔️ Ataques (até 3)</h4>
+          <div class="attack-input-group" style="grid-template-columns: 2fr 1fr 1fr;">
+           <div class="form-group" style="margin: 0;"><label for="attack1-name">Ataque 1</label> <input type="text" id="attack1-name" placeholder="Nome" maxlength="20">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack1-damage">Dano</label> <input type="number" id="attack1-damage" value="20" min="0" max="200">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack1-energy">⚡ Custo</label> <input type="number" id="attack1-energy" value="0" min="0" max="5">
+           </div>
+          </div>
+          <div class="attack-input-group" style="grid-template-columns: 2fr 1fr 1fr;">
+           <div class="form-group" style="margin: 0;"><label for="attack2-name">Ataque 2</label> <input type="text" id="attack2-name" placeholder="Nome" maxlength="20">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack2-damage">Dano</label> <input type="number" id="attack2-damage" value="40" min="0" max="200">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack2-energy">⚡ Custo</label> <input type="number" id="attack2-energy" value="1" min="0" max="5">
+           </div>
+          </div>
+          <div class="attack-input-group" style="grid-template-columns: 2fr 1fr 1fr;">
+           <div class="form-group" style="margin: 0;"><label for="attack3-name">Ataque 3 (Opcional)</label> <input type="text" id="attack3-name" placeholder="Nome" maxlength="20">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack3-damage">Dano</label> <input type="number" id="attack3-damage" value="60" min="0" max="200">
+           </div>
+           <div class="form-group" style="margin: 0;"><label for="attack3-energy">⚡ Custo</label> <input type="number" id="attack3-energy" value="2" min="0" max="5">
+           </div>
+          </div>
+         </div>
+         <div class="form-group"><label for="warrior-image">Imagem do Guerreiro (URL ou Base64)</label>
+          <div style="display: flex; gap: 10px; align-items: center;"><button type="button" class="btn btn-primary" id="upload-image-btn" style="flex-shrink: 0;">📷 Escolher Imagem</button> <input type="file" id="warrior-image-file" accept="image/*" style="display: none;"> <input type="text" id="warrior-image" placeholder="Ou cole URL da imagem..." style="flex: 1;">
+          </div>
+          <div id="image-preview-small" style="margin-top: 10px; display: none;"><img id="preview-img" alt="Preview" style="max-width: 100%; max-height: 100px; border-radius: 8px; border: 2px solid rgba(100, 100, 100, 0.5);">
+          </div>
+         </div>
+         <div class="color-picker-group">
+          <div class="form-group"><label for="warrior-bg-color">Cor de Fundo</label> <input type="color" id="warrior-bg-color" value="#667eea">
+          </div>
+          <div class="form-group"><label for="warrior-border-color">Cor da Borda</label> <input type="color" id="warrior-border-color" value="#e8c547">
+          </div>
+         </div>
+         <div class="form-group" style="margin-top: 20px;"><label>✨ Habilidades do Guerreiro (até 2)</label>
+          <div id="no-abilities-message" style="padding: 15px; background: rgba(231, 76, 60, 0.2); border: 2px solid rgba(231, 76, 60, 0.5); border-radius: 8px; text-align: center; color: #e74c3c;">
+              ️ Crie habilidades primeiro na aba de Habilidades!
+          </div>
+          <div id="warrior-abilities-selector" style="display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(0, 0, 0, 0.2); border-radius: 8px;"></div>
+         </div>
+        </div><!-- Formulário de Habilidade -->
+        <div id="ability-form" style="display: none;">
+         <div class="form-group"><label for="ability-name">Nome da Habilidade</label> <input type="text" id="ability-name" placeholder="Ex: Poção de Cura" maxlength="30">
+         </div>
+         <div class="form-group"><label for="ability-effect-type">Tipo de Efeito</label> <select id="ability-effect-type"> <option value="heal">💚 Cura</option> <option value="damage">💥 Dano</option> <option value="shield">🛡️ Escudo</option> <option value="team_shield">🛡️ Escudo de Equipe</option> <option value="revive">💫 Reviver</option> <option value="energy">⚡ Ganhar Energia</option> <option value="energy_drain">⚡ Dreno de Energia</option> <option value="area_damage">💢 Dano em Área</option> <option value="area_heal">💝 Cura em Área</option> <option value="poison">🧪 Veneno (Dano por Turno)</option> <option value="burn">🔥 Queimadura (Dano por Turno)</option> <option value="paralyze">⛓️ Paralisar (Impede Ataque)</option> <option value="sleep">💤 Adormecer (Impede Ataque)</option> <option value="confuse">🌀 Confundir (Ataque Aleatório)</option> <option value="freeze">🧊 Congelar</option> <option value="vulnerability">🎯 Vulnerabilidade</option> <option value="mark">🏹 Marca</option> <option value="weaken">🪶 Enfraquecer</option> <option value="silence">🤫 Silêncio</option> <option value="haste">🏃 Pressa</option> <option value="crit_boost">🎯 Foco</option> <option value="thorns">🌵 Espinhos</option> <option value="taunt">🗣️ Provocação</option> <option value="lifesteal">🩸 Dreno de Vida</option> <option value="armor_break">🪓 Quebra de Escudo</option> <option value="dispel">🧹 Purga</option> <option value="redirect">🔀 Redirecionar</option> <option value="cure_effects">✨ Curar Efeitos de Estado</option> </select>
+         </div>
+         <div class="form-group" id="effect-duration-group"><label for="ability-duration">⏱️ Duração (Turnos) - Para Efeitos de Estado</label> <input type="number" id="ability-duration" value="3" min="1" max="10"> <small style="color: #999; display: block; margin-top: 5px;">Quantos turnos o efeito dura (veneno, queimadura, etc.)</small>
+         </div>
+         <div class="form-group"><label for="ability-value">Valor do Efeito</label> <input type="number" id="ability-value" value="30" min="0" max="100">
+         </div>
+         <div class="form-group"><label for="ability-energy-cost">⚡ Custo de Energia (0-5)</label> <input type="number" id="ability-energy-cost" value="1" min="0" max="5">
+         </div>
+         <div class="form-group"><label for="ability-icon">Ícone (Emoji)</label> <input type="text" id="ability-icon" placeholder="Ex: ✨" maxlength="2">
+         </div>
+         <div class="form-group"><label for="ability-image">Imagem da Habilidade (URL ou Base64)</label>
+          <div style="display: flex; gap: 10px; align-items: center;"><button type="button" class="btn btn-primary" id="upload-ability-image-btn" style="flex-shrink: 0;">📷 Escolher Imagem</button> <input type="file" id="ability-image-file" accept="image/*" style="display: none;"> <input type="text" id="ability-image" placeholder="Ou cole URL da imagem..." style="flex: 1;">
+          </div>
+          <div id="ability-image-preview-small" style="margin-top: 10px; display: none;"><img id="ability-preview-img" alt="Preview" style="max-width: 100%; max-height: 100px; border-radius: 8px; border: 2px solid rgba(100, 100, 100, 0.5);">
+          </div>
+         </div>
+        </div>
+        <div style="margin-top: 20px;"><button class="btn btn-primary" id="save-card-btn">💾 Salvar Carta</button> <button class="btn btn-secondary" id="clear-editor-btn">🗑️ Limpar</button>
+        </div>
+       </div>
+       <div>
+        <h3 style="text-align: center;">Preview</h3>
+        <div id="editor-preview"></div>
+       </div>
+      </div>
+     </div><!-- Collection Tab -->
+     <div class="tab-content" id="collection">
+      <h2>Coleção de Cartas</h2>
+      <div class="card-type-selector" style="margin-bottom: 20px;"><button class="card-type-btn active" data-filter="warriors">⚔️ Guerreiros</button> <button class="card-type-btn" data-filter="abilities">✨ Habilidades</button> <button class="card-type-btn" data-filter="all">📚 Todas</button>
+      </div>
+      <div class="filters"><input type="text" id="filter-name" placeholder="Filtrar por nome..."> <select id="filter-type"> <option value="">Todos os tipos</option> <option value="Fogo">🔥 Fogo</option> <option value="Água">💧 Água</option> <option value="Terra">🌍 Terra</option> <option value="Voador">🦅 Voador</option> <option value="Elétrico">⚡ Elétrico</option> <option value="Natureza">🌿 Natureza</option> <option value="Luz">✨ Luz</option> <option value="Trevas">🌑 Trevas</option> </select>
+      </div>
+      <div id="collection-grid" class="grid"></div>
+     </div><!-- Battle Tab -->
+     <div class="tab-content" id="battle">
+      <h2>Arena de Batalha</h2>
+      <div style="background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+       <h3>🎮 Como Jogar</h3>
+       <p><strong>⚡ Energia:</strong> Voc   come  a com 1 de energia e ganha +1 por turno. Cada ataque tem um custo.</p>
+       <p><strong>⚔️ Ataques:</strong> Clique em um guerreiro e escolha qual ataque usar!</p>
+       <p><strong>🎯 Alvos:</strong> Após escolher o ataque, selecione qual inimigo atacar!</p>
+       <p><strong>✨ Habilidades:</strong> Use habilidades a qualquer momento (mesmo no turno inimigo)!</p>
+       <p><strong>⏭️ Passar Turno:</strong> Clique no botão para finalizar seu turno.</p>
+       <p><strong>🏆 Vitória:</strong> Derrote todos os 5 guerreiros inimigos!</p>
+      </div><button class="btn btn-primary" id="start-battle-btn" style="font-size: 1.2em; padding: 18px 35px;">⚔️ Selecionar Cartas para Batalha</button>
+      <div id="battle-screen" style="display: none; margin-top: 20px;">
+       <div class="battle-arena">
+        <div class="turn-indicator player-turn" id="turn-indicator">
+         🎲 SEU TURNO - Clique nos seus guerreiros para atacar!
+        </div><!-- Área do Inimigo -->
+        <section style="margin-bottom: 30px;">
+         <div class="player-section-header">
+          <h3 style="margin: 0;">🤖 Inimigo</h3>
+         </div>
+         <div class="energy-display"><span>⚡ Energia:</span> <span class="energy-counter" id="enemy-energy">0/20</span>
+         </div>
+         <div style="margin: 15px 0;">
+          <h4 style="margin-bottom: 10px;" id="enemy-abilities-title">✨ Habilidades (0/5)</h4>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; min-height: 120px; background: rgba(155, 89, 182, 0.1); padding: 10px; border-radius: 8px;" id="enemy-abilities"></div>
+         </div>
+         <div class="warriors-grid" id="enemy-warriors"></div>
+        </section><!-- Área do Jogador -->
+        <section>
+         <div class="player-section-header">
+          <h3 style="margin: 0;">👤 Você</h3><button class="btn btn-primary" id="end-turn-btn">⏭️ Passar Turno</button>
+         </div>
+         <div class="energy-display"><span>⚡ Energia:</span> <span class="energy-counter" id="player-energy">0/20</span>
+         </div>
+         <div style="margin: 15px 0;">
+          <h4 style="margin-bottom: 10px;" id="abilities-title">✨ Habilidades (0/5)</h4>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; min-height: 120px; background: rgba(155, 89, 182, 0.1); padding: 10px; border-radius: 8px;" id="player-abilities"></div>
+         </div>
+         <div class="warriors-grid" id="player-warriors"></div>
+        </section>
+        <div class="battle-log" id="battle-log"></div><button class="btn btn-danger" id="exit-battle-btn" style="margin-top: 15px;">❌ Sair da Batalha</button>
+       </div>
+      </div>
+     </div><!-- Settings Tab -->
+     <div class="tab-content" id="settings">
+      <h2>Configuraç  es</h2>
+      <h3>Estatísticas</h3>
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px;">
+       <p>Guerreiros: <strong id="stats-warriors">0</strong></p>
+       <p>Habilidades: <strong id="stats-abilities">0</strong></p>
+      </div>
+      <h3 style="margin-top: 30px;">💾 Armazenamento Local</h3>
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px;">
+       <p style="margin-bottom: 15px;">Suas cartas são salvas automaticamente no navegador!</p><button class="btn btn-primary" id="export-to-file">📥 Baixar Cole    ão (.json)</button> <button class="btn btn-secondary" id="import-from-file">📤 Carregar Coleção (.json)</button>
+      </div>
+      <h3 style="margin-top: 30px; color: #e74c3c;">Zona de Perigo</h3><button class="btn btn-danger" id="reset-all">🗑   Resetar Tudo</button>
+     </div>
+    </main>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      game_title: 'TCG Combat Creator Pro',
+      welcome_message: 'Crie Guerreiros e Habilidades Épicas!',
+      primary_color: '#2a7d78',
+      secondary_color: '#d94343',
+      background_color: '#0f0f1e',
+      text_color: '#e0e0e0',
+      surface_color: '#1a1a2e',
+      font_family: 'Segoe UI',
+      font_size: 16
+    };
+
+    const AppState = {
+      warriors: [],
+      abilities: [],
+      currentEditorType: 'warrior',
+      collectionFilter: 'warriors',
+      currentBattle: null,
+      playerEnergy: 1,
+      enemyEnergy: 1,
+      maxEnergy: 20,
+      abilityUseLimit: 2,
+      editingCard: null,
+      selectedWarriorAbilities: [],
+      mode: 'dev'
+    };
+
+    class WarriorCard {
+      constructor(data = {}) {
+        this.id = data.id || Date.now().toString() + Math.random().toString(36);
+        this.cardType = 'warrior';
+        this.name = (data.name || 'Guerreiro').substring(0, 30);
+        this.hp = Math.min(300, Math.max(30, parseInt(data.hp) || 100));
+        this.type = data.type || 'Fogo';
+        this.weakness = data.weakness || '';
+        this.attacks = data.attacks || [];
+        this.abilities = data.abilities || [];
+        this.bgColor = data.bgColor || '#667eea';
+        this.borderColor = data.borderColor || '#e8c547';
+        this.imageUrl = data.imageUrl || '';
+      }
+    }
+
+    class AbilityCard {
+      constructor(data = {}) {
+        this.id = data.id || Date.now().toString() + Math.random().toString(36);
+        this.cardType = 'ability';
+        this.name = (data.name || 'Habilidade').substring(0, 30);
+        this.effectType = data.effectType || 'heal';
+        this.value = Math.min(100, Math.max(0, parseInt(data.value) || 30));
+        this.energyCost = Math.min(5, Math.max(0, parseInt(data.energyCost) || 0));
+        this.duration = Math.min(10, Math.max(1, parseInt(data.duration) || 3));
+        this.icon = data.icon || '✨';
+        this.imageUrl = data.imageUrl || '';
+      }
+    }
+
+    class Renderer {
+      static escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      static renderWarriorCard(card, container) {
+        const typeIcons = {
+          'Fogo': '🔥', 'Água': '    ', 'Terra': '🌍',
+          'Voador': '🦅', 'Elétrico': '   ', 'Natureza': '🌿',
+          'Luz': '✨', 'Trevas': '🌑'
+        };
+
+        const preview = document.createElement('div');
+        preview.className = 'warrior-card-preview';
+        preview.style.border = `6px solid ${card.borderColor}`;
+        
+        let attacksHTML = '';
+        if (card.attacks && card.attacks.length > 0) {
+          attacksHTML = '<div class="attacks-section">';
+          card.attacks.forEach(attack => {
+            if (attack.name) {
+              const energyCost = attack.energy || 0;
+              attacksHTML += `
+                <div class="attack-item">
+                  <span class="attack-name">${this.escapeHtml(attack.name)} <span style="color: #ffd93d;">  ${energyCost}</span></span>
+                  <span class="attack-damage">${attack.damage} 💥</span>
+                </div>
+              `;
+            }
+          });
+          attacksHTML += '</div>';
+        }
+
+        let abilitiesHTML = '';
+        if (card.abilities && card.abilities.length > 0) {
+          abilitiesHTML = '<div style="margin-top: 5px; padding-top: 3px; border-top: 1px solid rgba(0,0,0,0.1);">';
+          abilitiesHTML += '<strong style="color: #9b59b6; font-size: 0.85em;">✨ Habilidades:</strong>';
+          card.abilities.forEach(ability => {
+            const energyCost = ability.energyCost || 0;
+            abilitiesHTML += `<div class="warrior-ability-item" data-ability-id="${this.escapeHtml(ability.id)}" style="font-size: 0.8em; color: #9b59b6; margin: 2px 0; cursor: pointer;">${this.escapeHtml(ability.icon)} ${this.escapeHtml(ability.name)} ⚡${energyCost}</div>`;
+          });
+          abilitiesHTML += '</div>';
+        }
+
+        let imageHTML = '';
+        if (card.imageUrl) {
+          imageHTML = `<img src="${this.escapeHtml(card.imageUrl)}" class="card-image" alt="${this.escapeHtml(card.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="card-image-placeholder" style="display: none;">${typeIcons[card.type] || '⚔️'}</div>`;
+        } else {
+          imageHTML = `<div class="card-image-placeholder">${typeIcons[card.type] || '⚔️'}</div>`;
+        }
+
+        preview.innerHTML = `
+          <div class="warrior-header">
+            <h3 class="warrior-name">${this.escapeHtml(card.name)}</h3>
+            <div class="warrior-stats">
+              <span class="stat-badge">❤️ ${card.hp}</span>
+            </div>
+          </div>
+          <div class="card-image-container" style="background: ${card.bgColor};">
+            ${imageHTML}
+          </div>
+          <div class="card-body">
+            <p><strong>Tipo:</strong> ${typeIcons[card.type]} ${this.escapeHtml(card.type)}</p>
+            ${card.weakness ? `<p class="weakness-badge">Fraqueza: ${typeIcons[card.weakness]} ${this.escapeHtml(card.weakness)}</p>` : ''}
+            ${attacksHTML}
+            ${abilitiesHTML}
+          </div>
+        `;
+
+        container.innerHTML = '';
+        container.appendChild(preview);
+      }
+
+      static renderAbilityCard(card, container) {
+        const labels = {
+          heal: '💚 Cura',
+          damage: '💥 Dano',
+          shield: '🛡️ Escudo',
+          team_shield: '🛡️ Escudo de Equipe',
+          revive: '💫 Reviver',
+          energy: '⚡ Energia',
+          energy_drain: '⚡ Dreno de Energia',
+          area_damage: '💢 Dano em Área',
+          area_heal: '💝 Cura em Área',
+          poison: '🧪 Veneno',
+          burn: '🔥 Queimadura',
+          paralyze: '⛓️ Paralisar',
+          sleep: '💤 Adormecer',
+          confuse: '🌀 Confundir',
+          freeze: '🧊 Congelar',
+          vulnerability: '🎯 Vulnerabilidade',
+          mark: '🏹 Marca',
+          weaken: '🪶 Enfraquecer',
+          silence: '🤫 Silêncio',
+          haste: '🏃 Pressa',
+          crit_boost: '🎯 Foco',
+          thorns: '🌵 Espinhos',
+          taunt: '🗣️ Provocação',
+          lifesteal: '🩸 Dreno de Vida',
+          armor_break: '🪓 Quebra de Escudo',
+          dispel: '🧹 Purga',
+          redirect: '🔀 Redirecionar',
+          cure_effects: '✨ Curar Efeitos'
+        };
+
+        let imageHTML = '';
+        if (card.imageUrl) {
+          imageHTML = `<img src="${this.escapeHtml(card.imageUrl)}" class="card-image" alt="${this.escapeHtml(card.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="card-image-placeholder" style="display: none; font-size: 5em;">${this.escapeHtml(card.icon)}</div>`;
+        } else {
+          imageHTML = `<div class="card-image-placeholder" style="font-size: 5em;">${this.escapeHtml(card.icon)}</div>`;
+        }
+
+        const energyCost = card.energyCost || 0;
+        const hasStatusEffect = ['poison','burn','paralyze','sleep','confuse','shield','freeze','vulnerability','weaken','mark','silence','haste','crit_boost','thorns','taunt','redirect'].includes(card.effectType);
+        const durationHTML = hasStatusEffect ? `<p class="ability-effect" style="color: #9b59b6;"><strong>⏱️ Duração:</strong> ${card.duration || 3} turnos</p>` : '';
+
+        const preview = document.createElement('div');
+        preview.className = 'ability-card-preview';
+        preview.innerHTML = `
+          <div class="ability-header">
+            <h3 class="ability-name">${this.escapeHtml(card.icon)} ${this.escapeHtml(card.name)}</h3>
+          </div>
+          <div class="card-image-container">
+            ${imageHTML}
+          </div>
+          <div class="card-body">
+            <span class="ability-type-badge">${labels[card.effectType]}</span>
+            <p class="ability-effect"><strong>Valor:</strong> ${card.value}</p>
+            ${durationHTML}
+            <p class="ability-effect" style="color: #ffd93d;"><strong>⚡ Custo:</strong> ${energyCost}</p>
+          </div>
+        `;
+
+        container.innerHTML = '';
+        container.appendChild(preview);
+      }
+    }
+
+    function showMessage(message) {
+      const toast = document.createElement('div');
+      toast.className = 'message-toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function saveToLocalStorage() {
+      const data = {
+        warriors: AppState.warriors,
+        abilities: AppState.abilities
+      };
+      localStorage.setItem('tcg_cards', JSON.stringify(data));
+    }
+
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem('tcg_cards');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          AppState.warriors = data.warriors.map(w => new WarriorCard(w));
+          AppState.abilities = data.abilities.map(a => new AbilityCard(a));
+          refreshCollection();
+          updateStats();
+        } catch (e) {
+          console.error('Erro ao carregar dados:', e);
+        }
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+      if (activeTab) activeTab.classList.add('active');
+      
+      const activeContent = document.getElementById(tabId);
+      if (activeContent) activeContent.classList.add('active');
+    }
+
+    function applyModeUi() {
+      const queryMode = new URLSearchParams(window.location.search).get('mode');
+      AppState.mode = (queryMode === 'public') ? 'public' : 'dev';
+      const isPublic = AppState.mode === 'public';
+      
+      const editorTab = document.querySelector('.nav-tab[data-tab="editor"]');
+      const editorContent = document.getElementById('editor');
+      if (isPublic) {
+        if (editorTab) editorTab.style.display = 'none';
+        if (editorContent) editorContent.style.display = 'none';
+        document.getElementById('welcome-message').textContent = 'Explore a coleção e batalhe! Edição desativada.';
+        switchTab('collection');
+      }
+    }
+
+    function updateWarriorAbilitiesSelector() {
+      const container = document.getElementById('warrior-abilities-selector');
+      const noAbilitiesMsg = document.getElementById('no-abilities-message');
+      
+      if (AppState.abilities.length === 0) {
+        noAbilitiesMsg.style.display = 'block';
+        container.style.display = 'none';
+        return;
+      }
+      
+      noAbilitiesMsg.style.display = 'none';
+      container.style.display = 'flex';
+      container.innerHTML = '';
+      
+      AppState.abilities.forEach(ability => {
+        const isSelected = AppState.selectedWarriorAbilities.some(a => a.id === ability.id);
+        
+        const item = document.createElement('div');
+        item.className = 'ability-checkbox-item' + (isSelected ? ' selected' : '');
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = isSelected;
+        checkbox.style.cssText = 'cursor: pointer; width: 18px; height: 18px;';
+        
+        const label = document.createElement('label');
+        label.style.cssText = 'flex: 1; cursor: pointer; font-size: 0.9em;';
+        const energyCost = ability.energyCost || 0;
+        label.textContent = `${ability.icon} ${ability.name}    ${energyCost}`;
+        
+        item.addEventListener('click', () => {
+          const currentIndex = AppState.selectedWarriorAbilities.findIndex(a => a.id === ability.id);
+          
+          if (currentIndex !== -1) {
+            AppState.selectedWarriorAbilities.splice(currentIndex, 1);
+          } else {
+            if (AppState.selectedWarriorAbilities.length >= 2) {
+              showMessage('❌ Você já selecionou 2 habilidades!');
+              return;
+            }
+            AppState.selectedWarriorAbilities.push(ability);
+          }
+          
+          updateWarriorAbilitiesSelector();
+          updatePreview();
+        });
+        
+        item.appendChild(checkbox);
+        item.appendChild(label);
+        container.appendChild(item);
+      });
+    }
+
+    function updatePreview() {
+      const preview = document.getElementById('editor-preview');
+      
+      if (AppState.currentEditorType === 'warrior') {
+        const attacks = [];
+        
+        const attack1Name = document.getElementById('attack1-name').value;
+        if (attack1Name) {
+          attacks.push({
+            name: attack1Name,
+            damage: parseInt(document.getElementById('attack1-damage').value) || 20,
+            energy: parseInt(document.getElementById('attack1-energy').value) || 0
+          });
+        }
+        
+        const attack2Name = document.getElementById('attack2-name').value;
+        if (attack2Name) {
+          attacks.push({
+            name: attack2Name,
+            damage: parseInt(document.getElementById('attack2-damage').value) || 40,
+            energy: parseInt(document.getElementById('attack2-energy').value) || 0
+          });
+        }
+        
+        const attack3Name = document.getElementById('attack3-name').value;
+        if (attack3Name) {
+          attacks.push({
+            name: attack3Name,
+            damage: parseInt(document.getElementById('attack3-damage').value) || 60,
+            energy: parseInt(document.getElementById('attack3-energy').value) || 0
+          });
+        }
+
+        const card = new WarriorCard({
+          name: document.getElementById('warrior-name').value || 'Guerreiro',
+          hp: parseInt(document.getElementById('warrior-hp').value) || 100,
+          type: document.getElementById('warrior-type').value,
+          weakness: document.getElementById('warrior-weakness').value,
+          attacks: attacks,
+          abilities: AppState.selectedWarriorAbilities || [],
+          bgColor: document.getElementById('warrior-bg-color').value,
+          borderColor: document.getElementById('warrior-border-color').value,
+          imageUrl: document.getElementById('warrior-image').value
+        });
+        Renderer.renderWarriorCard(card, preview);
+      } else {
+        const energyCostValue = document.getElementById('ability-energy-cost').value;
+        const card = new AbilityCard({
+          name: document.getElementById('ability-name').value || 'Habilidade',
+          effectType: document.getElementById('ability-effect-type').value,
+          value: parseInt(document.getElementById('ability-value').value) || 30,
+          energyCost: energyCostValue !== '' ? parseInt(energyCostValue) : 0,
+          duration: parseInt(document.getElementById('ability-duration').value) || 3,
+          icon: document.getElementById('ability-icon').value || '✨',
+          imageUrl: document.getElementById('ability-image').value
+        });
+        Renderer.renderAbilityCard(card, preview);
+      }
+    }
+
+    function saveCard() {
+      if (AppState.currentEditorType === 'warrior') {
+        const attacks = [];
+        
+        const attack1Name = document.getElementById('attack1-name').value;
+        if (attack1Name) {
+          const energyInput = document.getElementById('attack1-energy');
+          const energyValue = parseInt(energyInput.value);
+          attacks.push({
+            name: attack1Name,
+            damage: parseInt(document.getElementById('attack1-damage').value) || 20,
+            energy: isNaN(energyValue) ? 0 : energyValue
+          });
+        }
+        
+        const attack2Name = document.getElementById('attack2-name').value;
+        if (attack2Name) {
+          const energyInput = document.getElementById('attack2-energy');
+          const energyValue = parseInt(energyInput.value);
+          attacks.push({
+            name: attack2Name,
+            damage: parseInt(document.getElementById('attack2-damage').value) || 40,
+            energy: isNaN(energyValue) ? 0 : energyValue
+          });
+        }
+        
+        const attack3Name = document.getElementById('attack3-name').value;
+        if (attack3Name) {
+          const energyInput = document.getElementById('attack3-energy');
+          const energyValue = parseInt(energyInput.value);
+          attacks.push({
+            name: attack3Name,
+            damage: parseInt(document.getElementById('attack3-damage').value) || 60,
+            energy: isNaN(energyValue) ? 0 : energyValue
+          });
+        }
+
+        if (attacks.length === 0) {
+          showMessage('❌ Adicione pelo menos 1 ataque!');
+          return;
+        }
+
+        const card = new WarriorCard({
+          id: AppState.editingCard ? AppState.editingCard.id : undefined,
+          name: document.getElementById('warrior-name').value || 'Guerreiro',
+          hp: parseInt(document.getElementById('warrior-hp').value) || 100,
+          type: document.getElementById('warrior-type').value,
+          weakness: document.getElementById('warrior-weakness').value,
+          attacks: attacks,
+          abilities: AppState.selectedWarriorAbilities || [],
+          bgColor: document.getElementById('warrior-bg-color').value,
+          borderColor: document.getElementById('warrior-border-color').value,
+          imageUrl: document.getElementById('warrior-image').value
+        });
+        
+        if (AppState.editingCard) {
+          const index = AppState.warriors.findIndex(w => w.id === AppState.editingCard.id);
+          if (index !== -1) {
+            AppState.warriors[index] = card;
+            showMessage('   Guerreiro atualizado!');
+          }
+        } else {
+          AppState.warriors.push(card);
+          showMessage('✅ Guerreiro salvo!');
+        }
+      } else {
+        const energyCostInput = document.getElementById('ability-energy-cost');
+        const energyCostValue = parseInt(energyCostInput.value);
+        const card = new AbilityCard({
+          id: AppState.editingCard ? AppState.editingCard.id : undefined,
+          name: document.getElementById('ability-name').value || 'Habilidade',
+          effectType: document.getElementById('ability-effect-type').value,
+          value: parseInt(document.getElementById('ability-value').value) || 30,
+          energyCost: isNaN(energyCostValue) ? 0 : energyCostValue,
+          duration: parseInt(document.getElementById('ability-duration').value) || 3,
+          icon: document.getElementById('ability-icon').value || '✨',
+          imageUrl: document.getElementById('ability-image').value
+        });
+        
+        if (AppState.editingCard) {
+          const index = AppState.abilities.findIndex(a => a.id === AppState.editingCard.id);
+          if (index !== -1) {
+            AppState.abilities[index] = card;
+            showMessage('✅ Habilidade atualizada!');
+          }
+        } else {
+          AppState.abilities.push(card);
+          showMessage('✅ Habilidade salva!');
+        }
+        
+        updateWarriorAbilitiesSelector();
+      }
+      
+      saveToLocalStorage();
+      clearEditor();
+      refreshCollection();
+      updateStats();
+    }
+
+    function clearEditor() {
+      document.getElementById('warrior-name').value = '';
+      document.getElementById('warrior-hp').value = '100';
+      document.getElementById('warrior-type').value = 'Fogo';
+      document.getElementById('warrior-weakness').value = '';
+      document.getElementById('warrior-image').value = '';
+      document.getElementById('warrior-bg-color').value = '#667eea';
+      document.getElementById('warrior-border-color').value = '#e8c547';
+      document.getElementById('attack1-name').value = '';
+      document.getElementById('attack1-damage').value = '20';
+      document.getElementById('attack1-energy').value = '0';
+      document.getElementById('attack2-name').value = '';
+      document.getElementById('attack2-damage').value = '40';
+      document.getElementById('attack2-energy').value = '1';
+      document.getElementById('attack3-name').value = '';
+      document.getElementById('attack3-damage').value = '60';
+      document.getElementById('attack3-energy').value = '2';
+      document.getElementById('ability-name').value = '';
+      document.getElementById('ability-effect-type').value = 'heal';
+      document.getElementById('ability-value').value = '30';
+      document.getElementById('ability-energy-cost').value = '1';
+      document.getElementById('ability-icon').value = '';
+      document.getElementById('ability-image').value = '';
+      document.getElementById('image-preview-small').style.display = 'none';
+      document.getElementById('warrior-image-file').value = '';
+      document.getElementById('ability-image-preview-small').style.display = 'none';
+      document.getElementById('ability-image-file').value = '';
+      
+      AppState.editingCard = null;
+      AppState.selectedWarriorAbilities = [];
+      document.getElementById('save-card-btn').textContent = '💾 Salvar Carta';
+      
+      updateWarriorAbilitiesSelector();
+      updatePreview();
+    }
+
+    function editCard(card) {
+      AppState.editingCard = card;
+      switchTab('editor');
+      
+      if (card.cardType === 'warrior') {
+        AppState.currentEditorType = 'warrior';
+        document.querySelectorAll('#editor .card-type-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#editor .card-type-btn[data-type="warrior"]').classList.add('active');
+        document.getElementById('warrior-form').style.display = 'block';
+        document.getElementById('ability-form').style.display = 'none';
+        
+        document.getElementById('warrior-name').value = card.name;
+        document.getElementById('warrior-hp').value = card.hp;
+        document.getElementById('warrior-type').value = card.type;
+        document.getElementById('warrior-weakness').value = card.weakness || '';
+        document.getElementById('warrior-image').value = card.imageUrl || '';
+        document.getElementById('warrior-bg-color').value = card.bgColor;
+        document.getElementById('warrior-border-color').value = card.borderColor;
+        
+        document.getElementById('attack1-name').value = '';
+        document.getElementById('attack1-damage').value = '20';
+        document.getElementById('attack1-energy').value = '1';
+        document.getElementById('attack2-name').value = '';
+        document.getElementById('attack2-damage').value = '40';
+        document.getElementById('attack2-energy').value = '2';
+        document.getElementById('attack3-name').value = '';
+        document.getElementById('attack3-damage').value = '60';
+        document.getElementById('attack3-energy').value = '3';
+        
+        if (card.attacks && card.attacks[0]) {
+          document.getElementById('attack1-name').value = card.attacks[0].name;
+          document.getElementById('attack1-damage').value = card.attacks[0].damage;
+          document.getElementById('attack1-energy').value = card.attacks[0].energy || 1;
+        }
+        if (card.attacks && card.attacks[1]) {
+          document.getElementById('attack2-name').value = card.attacks[1].name;
+          document.getElementById('attack2-damage').value = card.attacks[1].damage;
+          document.getElementById('attack2-energy').value = card.attacks[1].energy || 2;
+        }
+        if (card.attacks && card.attacks[2]) {
+          document.getElementById('attack3-name').value = card.attacks[2].name;
+          document.getElementById('attack3-damage').value = card.attacks[2].damage;
+          document.getElementById('attack3-energy').value = card.attacks[2].energy || 3;
+        }
+        
+        if (card.imageUrl) {
+          const previewContainer = document.getElementById('image-preview-small');
+          const previewImg = document.getElementById('preview-img');
+          previewImg.src = card.imageUrl;
+          previewContainer.style.display = 'block';
+        } else {
+          document.getElementById('image-preview-small').style.display = 'none';
+        }
+        
+        AppState.selectedWarriorAbilities = card.abilities ? [...card.abilities] : [];
+        updateWarriorAbilitiesSelector();
+      } else {
+        AppState.currentEditorType = 'ability';
+        document.querySelectorAll('#editor .card-type-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector('#editor .card-type-btn[data-type="ability"]').classList.add('active');
+        document.getElementById('warrior-form').style.display = 'none';
+        document.getElementById('ability-form').style.display = 'block';
+        
+        document.getElementById('ability-name').value = card.name;
+        document.getElementById('ability-effect-type').value = card.effectType;
+        document.getElementById('ability-value').value = card.value;
+        document.getElementById('ability-energy-cost').value = card.energyCost || 0;
+        document.getElementById('ability-icon').value = card.icon;
+        document.getElementById('ability-image').value = card.imageUrl || '';
+        
+        if (card.imageUrl) {
+          const previewContainer = document.getElementById('ability-image-preview-small');
+          const previewImg = document.getElementById('ability-preview-img');
+          previewImg.src = card.imageUrl;
+          previewContainer.style.display = 'block';
+        } else {
+          document.getElementById('ability-image-preview-small').style.display = 'none';
+        }
+      }
+      
+      updatePreview();
+      document.getElementById('save-card-btn').textContent = '💾 Atualizar Carta';
+      showMessage('✏️ Editando carta...');
+    }
+
+    let cardPreviewTimeout = null;
+    let currentPreviewElements = null;
+    let battleHoverInfo = null;
+
+    function showCardPreview(card, originalElement) {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'card-preview-backdrop';
+      
+      const modalContainer = document.createElement('div');
+      modalContainer.className = 'card-preview-modal';
+      
+      const previewDiv = document.createElement('div');
+      previewDiv.className = 'card-preview-large';
+      
+      if (card.cardType === 'warrior') {
+        Renderer.renderWarriorCard(card, previewDiv);
+      } else {
+        Renderer.renderAbilityCard(card, previewDiv);
+      }
+      
+      modalContainer.appendChild(previewDiv);
+      
+      document.body.appendChild(backdrop);
+      document.body.appendChild(modalContainer);
+      
+      currentPreviewElements = { backdrop, modalContainer };
+      
+      const closePreview = () => {
+        if (currentPreviewElements) {
+          currentPreviewElements.backdrop.remove();
+          currentPreviewElements.modalContainer.remove();
+          currentPreviewElements = null;
+        }
+      };
+      
+      backdrop.addEventListener('click', closePreview);
+      document.addEventListener('keydown', function escapeHandler(e) {
+        if (e.key === 'Escape') {
+          closePreview();
+          document.removeEventListener('keydown', escapeHandler);
+        }
+      });
+    }
+
+    function hideCardPreview() {
+      if (currentPreviewElements) {
+        currentPreviewElements.backdrop.remove();
+        currentPreviewElements.modalContainer.remove();
+        currentPreviewElements = null;
+      }
+    }
+
+    function showBattleHoverInfo(warrior, anchorEl) {
+      hideBattleHoverInfo();
+      const rect = anchorEl.getBoundingClientRect();
+      const info = document.createElement('div');
+      info.className = 'battle-hover-info';
+      info.style.cssText = 'position: fixed; z-index: 10000; background: rgba(0,0,0,0.85); color: #fff; padding: 10px 12px; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); max-width: 260px; pointer-events: none;';
+      let html = `<div style="font-weight:bold; margin-bottom:6px;">${Renderer.escapeHtml(warrior.name)}</div>`;
+      html += `<div style="font-size:.9em; margin-bottom:4px;">❤️ ${warrior.currentHp}/${warrior.hp}</div>`;
+      html += `<div style="font-size:.9em; margin-bottom:6px;"><strong>Tipo:</strong> ${Renderer.escapeHtml(warrior.type)}</div>`;
+      if (warrior.attacks && warrior.attacks.length) {
+        html += '<div style="font-weight:bold; margin-bottom:4px;">⚔️ Ataques</div>' +
+          warrior.attacks.map(a => `<div style="font-size:.9em;">${Renderer.escapeHtml(a.name)} • ${a.damage}💥 • ⚡${(a.energy||0)}</div>`).join('');
+      }
+      if (warrior.abilities && warrior.abilities.length) {
+        html += '<div style="font-weight:bold; margin:6px 0 4px;">✨ Habilidades</div>' +
+          warrior.abilities.map(ab => `<div style="font-size:.9em;">${Renderer.escapeHtml(ab.icon)} ${Renderer.escapeHtml(ab.name)} • ${ab.value} • ⚡${(ab.energyCost||0)}</div>`).join('');
+      }
+      info.innerHTML = html;
+      const margin = 10;
+      let left = rect.right + margin;
+      let top = rect.top;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const width = 260;
+      const height = 200;
+      if (left + width > vw) left = rect.left - width - margin;
+      if (top + height > vh) top = Math.max(10, vh - height - margin);
+      info.style.left = `${left}px`;
+      info.style.top = `${top}px`;
+      document.body.appendChild(info);
+      battleHoverInfo = info;
+    }
+
+    function hideBattleHoverInfo() {
+      if (battleHoverInfo) {
+        battleHoverInfo.remove();
+        battleHoverInfo = null;
+      }
+    }
+
+    function showAbilityHoverInfo(ability, anchorEl) {
+      hideBattleHoverInfo();
+      const rect = anchorEl.getBoundingClientRect();
+      const info = document.createElement('div');
+      info.className = 'battle-hover-info';
+      info.style.cssText = 'position: fixed; z-index: 10000; background: rgba(0,0,0,0.85); color: #fff; padding: 10px 12px; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); max-width: 260px; pointer-events: none;';
+      const labels = { heal: '💚 Cura', damage: '💥 Dano', shield: '🛡️ Escudo', team_shield: '🛡️ Escudo de Equipe', revive: '💫 Reviver', energy: '⚡ Energia', energy_drain: '⚡ Dreno de Energia', area_damage: '💢 Dano em Área', area_heal: '💝 Cura em Área', poison: '🧪 Veneno', burn: '🔥 Queimadura', paralyze: '⛓️ Paralisar', sleep: '💤 Adormecer', confuse: '🌀 Confundir', freeze: '🧊 Congelar', vulnerability: '🎯 Vulnerabilidade', mark: '🏹 Marca', weaken: '🪶 Enfraquecer', silence: '🤫 Silêncio', haste: '🏃 Pressa', crit_boost: '🎯 Foco', thorns: '🌵 Espinhos', taunt: '🗣️ Provocação', lifesteal: '🩸 Dreno de Vida', armor_break: '🪓 Quebra de Escudo', dispel: '🧹 Purga', redirect: '🔀 Redirecionar', cure_effects: '✨ Curar Efeitos' };
+      const energyCost = ability.energyCost || 0;
+      const hasStatus = ['poison','burn','paralyze','sleep','confuse','shield'].includes(ability.effectType);
+      let html = `<div style="font-weight:bold; margin-bottom:6px;">${Renderer.escapeHtml(ability.icon)} ${Renderer.escapeHtml(ability.name)}</div>`;
+      html += `<div style="font-size:.9em; margin-bottom:4px;">${labels[ability.effectType] || ''}</div>`;
+      html += `<div style="font-size:.9em;">Valor: ${ability.value} • ⚡${energyCost}${hasStatus ? ` • ⏱️ ${ability.duration||3}t` : ''}</div>`;
+      info.innerHTML = html;
+      const margin = 10;
+      let left = rect.right + margin;
+      let top = rect.top;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const width = 260;
+      const height = 120;
+      if (left + width > vw) left = rect.left - width - margin;
+      if (top + height > vh) top = Math.max(10, vh - height - margin);
+      info.style.left = `${left}px`;
+      info.style.top = `${top}px`;
+      document.body.appendChild(info);
+      battleHoverInfo = info;
+    }
+
+    function applyShieldAndDealDamage(target, damage, attacker) {
+      let modified = damage;
+      if (target.statusEffects && target.statusEffects.length) {
+        const vul = target.statusEffects.filter(e=>e.type==='vulnerability').reduce((s,e)=>s+e.value,0);
+        const mark = target.statusEffects.filter(e=>e.type==='mark').reduce((s,e)=>s+e.value,0);
+        if (vul) modified += vul;
+        if (mark) modified += mark;
+        if (target.statusEffects.some(e=>e.type==='freeze')) modified *= 2;
+        const redirectEff = target.statusEffects.find(e=>e.type==='redirect');
+        if (redirectEff && attacker && AppState.currentBattle) {
+          const isPlayer = AppState.currentBattle.playerWarriors.some(w=>w.id===target.id);
+          const pool = (isPlayer ? AppState.currentBattle.playerWarriors : AppState.currentBattle.enemyWarriors).filter(w=>w.currentHp>0 && w.id!==target.id);
+          if (pool.length) {
+            const newTarget = pool[Math.floor(Math.random()*pool.length)];
+            addLog(`🔀 Ataque foi redirecionado de ${target.name} para ${newTarget.name}!`);
+            target = newTarget;
+          }
+        }
+      }
+      if (attacker && attacker.statusEffects && attacker.statusEffects.length) {
+        const weaken = attacker.statusEffects.filter(e=>e.type==='weaken').reduce((s,e)=>s+e.value,0);
+        if (weaken) modified = Math.max(0, modified - weaken);
+        const crit = attacker.statusEffects.find(e=>e.type==='crit_boost');
+        if (crit) {
+          modified += crit.value;
+          crit.duration--;
+          if (crit.duration <= 0) {
+            attacker.statusEffects = attacker.statusEffects.filter(e=>!(e.type==='crit_boost' && e.duration<=0));
+            addLog(`✨ ${attacker.name} consumiu bônus de ataque!`);
+          }
+        }
+      }
+      let remaining = modified;
+      if (target.statusEffects && target.statusEffects.length) {
+        let absorbedTotal = 0;
+        target.statusEffects.forEach(e => {
+          if (e.type !== 'shield' || remaining <= 0) return;
+          const absorb = Math.min(e.value, remaining);
+          e.value -= absorb;
+          remaining -= absorb;
+          absorbedTotal += absorb;
+        });
+        target.statusEffects = target.statusEffects.filter(e => !(e.type === 'shield' && e.value <= 0));
+        if (absorbedTotal > 0) addLog(`🛡️ Escudo absorveu ${absorbedTotal} de dano em ${target.name}!`);
+      }
+      target.currentHp = Math.max(0, target.currentHp - remaining);
+      if (attacker && target.statusEffects && target.statusEffects.some(e=>e.type==='thorns') && attacker.currentHp > 0) {
+        const reflect = target.statusEffects.filter(e=>e.type==='thorns').reduce((s,e)=>s+e.value,0);
+        if (reflect > 0) {
+          addLog(`🌵 Espinhos refletiram ${reflect} de dano em ${attacker.name}!`);
+          applyShieldAndDealDamage(attacker, reflect);
+        }
+      }
+      return remaining;
+    }
+
+    function refreshCollection() {
+      const nameFilter = document.getElementById('filter-name').value.toLowerCase();
+      const typeFilter = document.getElementById('filter-type').value;
+
+      let allCards = [];
+
+      if (AppState.collectionFilter === 'warriors' || AppState.collectionFilter === 'all') {
+        allCards = [...allCards, ...AppState.warriors];
+      }
+
+      if (AppState.collectionFilter === 'abilities' || AppState.collectionFilter === 'all') {
+        allCards = [...allCards, ...AppState.abilities];
+      }
+
+      let filtered = allCards.filter(card => {
+        if (nameFilter && !card.name.toLowerCase().includes(nameFilter)) return false;
+        if (typeFilter && card.type !== typeFilter) return false;
+        return true;
+      });
+
+      const grid = document.getElementById('collection-grid');
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Nenhuma carta encontrada. Crie suas cartas no Editor!</p>';
+        return;
+      }
+
+      filtered.forEach(card => {
+        const div = document.createElement('div');
+        div.className = 'card-item';
+        
+        const preview = document.createElement('div');
+        if (card.cardType === 'warrior') {
+          Renderer.renderWarriorCard(card, preview);
+        } else {
+          Renderer.renderAbilityCard(card, preview);
+        }
+        div.appendChild(preview.firstChild);
+
+        div.addEventListener('mouseenter', () => {
+          cardPreviewTimeout = setTimeout(() => {
+            showCardPreview(card, div);
+          }, 3000);
+        });
+
+        div.addEventListener('mouseleave', () => {
+          if (cardPreviewTimeout) {
+            clearTimeout(cardPreviewTimeout);
+            cardPreviewTimeout = null;
+            hideCardPreview();
+          }
+        });
+
+        div.addEventListener('click', (e) => {
+          if (e.target.closest('.btn')) return;
+          if (cardPreviewTimeout) { clearTimeout(cardPreviewTimeout); cardPreviewTimeout = null; }
+          showCardPreview(card, div);
+        });
+
+        if (AppState.mode !== 'public') {
+          const actionsDiv = document.createElement('div');
+          actionsDiv.style.marginTop = '10px';
+          actionsDiv.style.display = 'flex';
+          actionsDiv.style.gap = '10px';
+          
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-primary';
+          editBtn.textContent = '✏️ Editar';
+          editBtn.onclick = () => editCard(card);
+          
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'btn btn-danger';
+          deleteBtn.textContent = '🗑️ Deletar';
+          deleteBtn.onclick = () => {
+            if (card.cardType === 'warrior') {
+              AppState.warriors = AppState.warriors.filter(w => w.id !== card.id);
+            } else {
+              AppState.abilities = AppState.abilities.filter(a => a.id !== card.id);
+            }
+            saveToLocalStorage();
+            refreshCollection();
+            updateStats();
+            updateWarriorAbilitiesSelector();
+            showMessage('🗑️ Carta deletada!');
+          };
+          
+          actionsDiv.appendChild(editBtn);
+          actionsDiv.appendChild(deleteBtn);
+          div.appendChild(actionsDiv);
+        }
+
+        grid.appendChild(div);
+      });
+    }
+
+    function updateStats() {
+      document.getElementById('stats-warriors').textContent = AppState.warriors.length;
+      document.getElementById('stats-abilities').textContent = AppState.abilities.length;
+    }
+
+    function startBattle() {
+      if (AppState.warriors.length < 5) {
+        showMessage('❌ Você precisa de pelo menos 5 guerreiros!');
+        return;
+      }
+
+      if (AppState.abilities.length === 0) {
+        showMessage('❌ Você precisa de pelo menos 1 habilidade!');
+        return;
+      }
+
+      showWarriorSelectionModal();
+    }
+
+    function showWarriorSelectionModal() {
+      const modal = document.createElement('div');
+      modal.className = 'custom-modal';
+      modal.innerHTML = `
+        <div class="custom-modal-content" style="max-width: 700px;">
+          <h3 style="margin: 0 0 15px 0;">⚔️ Escolha 5 Guerreiros</h3>
+          <div id="warrior-selection-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; max-height: 500px; overflow-y: auto; margin: 10px 0; padding: 10px;"></div>
+          <div style="text-align: center; margin-top: 15px;">
+            <p style="color: #ffd93d; font-weight: bold; margin: 0 0 15px 0;">Selecionados: <span id="selected-warriors-count">0</span>/5</p>
+            <button class="btn btn-primary" id="confirm-warriors" disabled>➡️ Próximo</button>
+            <button class="btn btn-secondary" id="cancel-warrior-selection">❌ Cancelar</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      const selectedWarriors = [];
+      const grid = document.getElementById('warrior-selection-grid');
+      
+      AppState.warriors.forEach(warrior => {
+        const card = document.createElement('div');
+        card.style.cssText = 'cursor: pointer; border: 3px solid transparent; border-radius: 8px; transition: all 0.2s; background: rgba(255, 107, 107, 0.2); padding: 5px; min-width: 150px;';
+        
+        const preview = document.createElement('div');
+        Renderer.renderWarriorCard(warrior, preview);
+        card.appendChild(preview.firstChild);
+        
+        card.addEventListener('click', () => {
+          const index = selectedWarriors.findIndex(w => w.id === warrior.id);
+          
+          if (index !== -1) {
+            selectedWarriors.splice(index, 1);
+            card.style.border = '3px solid transparent';
+            card.style.background = 'rgba(255, 107, 107, 0.2)';
+            card.style.boxShadow = 'none';
+          } else {
+            if (selectedWarriors.length >= 5) {
+              showMessage('❌ Você já selecionou 5 guerreiros!');
+              return;
+            }
+            selectedWarriors.push(warrior);
+            card.style.border = '3px solid #4ecdc4';
+            card.style.background = 'rgba(78, 205, 196, 0.3)';
+            card.style.boxShadow = '0 0 15px rgba(78, 205, 196, 0.6)';
+          }
+          
+          document.getElementById('selected-warriors-count').textContent = selectedWarriors.length;
+          document.getElementById('confirm-warriors').disabled = selectedWarriors.length === 0;
+        });
+        
+        grid.appendChild(card);
+      });
+      
+      document.getElementById('confirm-warriors').onclick = () => {
+        modal.remove();
+        showAbilitySelectionModal(selectedWarriors);
+      };
+      
+      document.getElementById('cancel-warrior-selection').onclick = () => modal.remove();
+    }
+
+    function showAbilitySelectionModal(selectedWarriors) {
+      const modal = document.createElement('div');
+      modal.className = 'custom-modal';
+      modal.innerHTML = `
+        <div class="custom-modal-content" style="max-width: 700px;">
+          <h3 style="margin: 0 0 15px 0;">✨ Escolha até 5 Habilidades</h3>
+          <div id="ability-selection-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-height: 500px; overflow-y: auto; margin: 10px 0; padding: 10px;"></div>
+          <div style="text-align: center; margin-top: 15px;">
+            <p style="color: #ffd93d; font-weight: bold; margin: 0 0 10px 0;">Selecionadas: <span id="selected-count">0</span>/5</p>
+            <div style="margin-bottom: 10px;">
+              <button class="btn btn-secondary" id="decide-first-btn">🎲 Quem começa?</button>
+              <span id="first-player-result" style="margin-left: 10px; font-weight: bold; color: #4ecdc4;">Você começa</span>
+            </div>
+            <button class="btn btn-primary" id="confirm-abilities" disabled>⚔️ Iniciar Batalha</button>
+            <button class="btn btn-secondary" id="back-to-warriors">⬅️ Voltar</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+
+      AppState.nextStartingTurn = AppState.nextStartingTurn || 'player';
+      const resultEl = document.getElementById('first-player-result');
+      if (resultEl) {
+        resultEl.textContent = AppState.nextStartingTurn === 'player' ? 'Você começa' : 'Inimigo começa';
+        resultEl.style.color = AppState.nextStartingTurn === 'player' ? '#4ecdc4' : '#e74c3c';
+      }
+      const decideBtn = document.getElementById('decide-first-btn');
+      if (decideBtn) {
+        decideBtn.onclick = () => {
+          const starter = Math.random() < 0.5 ? 'player' : 'enemy';
+          AppState.nextStartingTurn = starter;
+          if (resultEl) {
+            resultEl.textContent = starter === 'player' ? 'Você começa' : 'Inimigo começa';
+            resultEl.style.color = starter === 'player' ? '#4ecdc4' : '#e74c3c';
+          }
+        };
+      }
+      
+      const selectedAbilities = [];
+      const grid = document.getElementById('ability-selection-grid');
+      
+      AppState.abilities.forEach(ability => {
+        const card = document.createElement('div');
+        card.style.cssText = 'cursor: pointer; border: 3px solid transparent; border-radius: 8px; transition: all 0.2s; background: rgba(155, 89, 182, 0.2); padding: 5px;';
+        
+        const preview = document.createElement('div');
+        Renderer.renderAbilityCard(ability, preview);
+        card.appendChild(preview.firstChild);
+        
+        card.addEventListener('click', () => {
+          const index = selectedAbilities.findIndex(a => a.id === ability.id);
+          
+          if (index !== -1) {
+            selectedAbilities.splice(index, 1);
+            card.style.border = '3px solid transparent';
+            card.style.background = 'rgba(155, 89, 182, 0.2)';
+            card.style.boxShadow = 'none';
+          } else {
+            if (selectedAbilities.length >= 5) {
+              showMessage('❌ Você já selecionou 5 habilidades!');
+              return;
+            }
+            selectedAbilities.push(ability);
+            card.style.border = '3px solid #4ecdc4';
+            card.style.background = 'rgba(78, 205, 196, 0.3)';
+            card.style.boxShadow = '0 0 15px rgba(78, 205, 196, 0.6)';
+          }
+          
+          document.getElementById('selected-count').textContent = selectedAbilities.length;
+          document.getElementById('confirm-abilities').disabled = selectedAbilities.length === 0;
+        });
+        
+        grid.appendChild(card);
+      });
+      
+      document.getElementById('confirm-abilities').onclick = () => {
+        modal.remove();
+        initializeBattle(selectedWarriors, selectedAbilities);
+      };
+      
+      document.getElementById('back-to-warriors').onclick = () => {
+        modal.remove();
+        showWarriorSelectionModal();
+      };
+    }
+
+    function initializeBattle(selectedWarriors, selectedAbilities) {
+      const shuffled = [...AppState.warriors].sort(() => Math.random() - 0.5);
+      
+      const shuffledAbilities = [...AppState.abilities].sort(() => Math.random() - 0.5);
+      const enemyAbilityCount = Math.min(Math.floor(Math.random() * 3) + 3, shuffledAbilities.length);
+      const enemyAbilities = shuffledAbilities.slice(0, enemyAbilityCount);
+      
+      const playerWarriors = selectedWarriors.map(w => ({
+        ...w,
+        currentHp: w.hp,
+        statusEffects: []
+      }));
+      
+      const enemyWarriors = shuffled.slice(0, 5).map(w => ({
+        ...w,
+        currentHp: w.hp,
+        statusEffects: []
+      }));
+
+      AppState.currentBattle = {
+        playerWarriors,
+        enemyWarriors,
+        playerAbilities: selectedAbilities,
+        enemyAbilities: enemyAbilities,
+        turn: (AppState.nextStartingTurn || 'player'),
+        enemyEnergy: 1,
+        playerAbilityUses: 0,
+        enemyAbilityUses: 0
+      };
+
+      AppState.playerEnergy = 1;
+
+      // Mostrar sala de batalha e ocultar app principal
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('battle-room').style.display = 'block';
+      
+      renderBattle();
+      if (AppState.currentBattle.turn === 'player') {
+        document.getElementById('turn-indicator').textContent = '🎲 SEU TURNO - Clique nos seus guerreiros para atacar!';
+        addLog('⚔️ Batalha iniciada! Você começa com 1 de energia.');
+      } else {
+        document.getElementById('turn-indicator').textContent = '🤖 TURNO DO INIMIGO';
+        addLog('⚔️ Batalha iniciada! Inimigo começa com 1 de energia.');
+        setTimeout(() => enemyTurn(), 800);
+      }
+      addLog(`💡 Inimigo tem ${enemyAbilities.length} habilidades disponíveis!`);
+    }
+
+    function showAttackModal(warrior) {
+      const hasParalyze = warrior.statusEffects && warrior.statusEffects.some(e => e.type === 'paralyze');
+      const hasSleep = warrior.statusEffects && warrior.statusEffects.some(e => e.type === 'sleep');
+      
+      if (hasParalyze) {
+        showMessage(`⛓️ ${warrior.name} está paralisado e n    o pode atacar!`);
+        return;
+      }
+      
+      if (hasSleep) {
+        showMessage(`💤 ${warrior.name} está dormindo e não pode atacar!`);
+        return;
+      }
+      
+      const hasConfuse = warrior.statusEffects && warrior.statusEffects.some(e => e.type === 'confuse');
+      
+      const modal = document.createElement('div');
+      modal.className = 'custom-modal';
+      modal.innerHTML = `
+        <div class="custom-modal-content">
+          <h3>⚔️ Escolha o Ataque de ${Renderer.escapeHtml(warrior.name)}</h3>
+          ${hasConfuse ? '<p style="text-align: center; color: #9b59b6; font-weight: bold; margin-bottom: 10px;">🌀 CONFUSO - Pode atacar qualquer alvo!</p>' : ''}
+          <p style="text-align: center; color: #ffd93d; margin-bottom: 10px;">Energia disponível: ⚡${AppState.playerEnergy}</p>
+          <div class="attack-options" id="attack-options"></div>
+          <button class="btn btn-secondary" id="cancel-attack">⬅️ Cancelar</button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      const optionsContainer = document.getElementById('attack-options');
+      warrior.attacks.forEach((attack) => {
+        const energyCost = attack.energy || 0;
+        const canAfford = AppState.playerEnergy >= energyCost;
+        
+        const btn = document.createElement('div');
+        btn.className = 'attack-option-btn';
+        if (!canAfford) {
+          btn.style.opacity = '0.5';
+          btn.style.cursor = 'not-allowed';
+        }
+        btn.innerHTML = `
+          <span>${Renderer.escapeHtml(attack.name)} <span style="color: #ffd93d;">⚡${energyCost}</span></span>
+          <span class="attack-option-damage">${attack.damage} 💥</span>
+        `;
+        
+        if (canAfford) {
+          btn.onclick = () => {
+            modal.remove();
+            showTargetSelectionModal(warrior, attack);
+          };
+        } else {
+          btn.onclick = () => {
+            showMessage('   Energia insuficiente para este ataque!');
+          };
+        }
+        
+        optionsContainer.appendChild(btn);
+      });
+      
+      document.getElementById('cancel-attack').onclick = () => modal.remove();
+      modal.onclick = (e) => {
+        if (e.target === modal) modal.remove();
+      };
+    }
+
+    function showTargetSelectionModal(warrior, attack) {
+      const { enemyWarriors, playerWarriors } = AppState.currentBattle;
+      const hasConfuse = warrior.statusEffects && warrior.statusEffects.some(e => e.type === 'confuse');
+      
+      let aliveEnemies = enemyWarriors.filter(w => w.currentHp > 0);
+      
+      if (hasConfuse) {
+        const allPossibleTargets = [...aliveEnemies, ...playerWarriors.filter(w => w.currentHp > 0)];
+        const randomTarget = allPossibleTargets[Math.floor(Math.random() * allPossibleTargets.length)];
+        
+        const isAlly = playerWarriors.some(w => w.id === randomTarget.id);
+        
+        if (isAlly) {
+          addLog(`🌀 ${warrior.name} está confuso e atacou o próprio aliado!`);
+        }
+        
+        executeAttack(warrior, attack, randomTarget);
+        return;
+      }
+      
+      if (aliveEnemies.length === 0) {
+        showMessage('❌ Nenhum inimigo disponível!');
+        return;
+      }
+      
+      const modal = document.createElement('div');
+      modal.className = 'custom-modal';
+      modal.innerHTML = `
+        <div class="custom-modal-content" style="max-width: 700px;">
+          <h3 style="margin: 0 0 15px 0;">🎯 Escolha o Alvo para ${Renderer.escapeHtml(attack.name)}</h3>
+          <div id="target-selection-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin: 10px 0; padding: 10px;"></div>
+          <button class="btn btn-secondary" id="cancel-target">⬅️ Voltar</button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      const grid = document.getElementById('target-selection-grid');
+      
+      aliveEnemies.forEach(enemy => {
+        const card = document.createElement('div');
+        card.style.cssText = 'cursor: pointer; border: 3px solid transparent; border-radius: 8px; transition: all 0.2s; background: rgba(231, 76, 60, 0.2); padding: 5px;';
+        
+        const preview = document.createElement('div');
+        Renderer.renderWarriorCard(enemy, preview);
+        card.appendChild(preview.firstChild);
+        
+        if (enemy.weakness && enemy.weakness === warrior.type) {
+          const bonusDiv = document.createElement('div');
+          bonusDiv.innerHTML = '<p style="color: #e74c3c; font-weight: bold; text-align: center; margin: 5px 0 0 0; font-size: 0.9em;">⚠️ SUPER EFETIVO!</p>';
+          card.appendChild(bonusDiv.firstChild);
+        }
+        
+        card.addEventListener('mouseenter', () => {
+          card.style.border = '3px solid #e74c3c';
+          card.style.background = 'rgba(231, 76, 60, 0.4)';
+          card.style.transform = 'translateY(-3px)';
+          card.style.boxShadow = '0 5px 15px rgba(231, 76, 60, 0.6)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.border = '3px solid transparent';
+          card.style.background = 'rgba(231, 76, 60, 0.2)';
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = 'none';
+        });
+        
+        card.addEventListener('click', () => {
+          modal.remove();
+          executeAttack(warrior, attack, enemy);
+        });
+        
+        grid.appendChild(card);
+      });
+      
+      document.getElementById('cancel-target').onclick = () => {
+        modal.remove();
+        showAttackModal(warrior);
+      };
+      
+      modal.onclick = (e) => {
+        if (e.target === modal) {
+          modal.remove();
+          showAttackModal(warrior);
+        }
+      };
+    }
+
+    function executeAttack(warrior, attack, target) {
+      const energyCost = attack.energy || 0;
+      
+      if (AppState.playerEnergy < energyCost) {
+        showMessage('❌ Energia insuficiente!');
+        return;
+      }
+      
+      if (target && target.currentHp > 0) {
+        AppState.playerEnergy -= energyCost;
+        
+        let damage = attack.damage;
+        
+        if (target.weakness && target.weakness === warrior.type) {
+          damage += 20;
+          addLog(`⚠️ SUPER EFETIVO! +20 de dano extra!`);
+        }
+        
+        const dealt = applyShieldAndDealDamage(target, damage, warrior);
+        
+        addLog(`⚔️ ${warrior.name} usou ${attack.name} (-⚡${energyCost}) causando ${dealt} de dano em ${target.name}!`);
+        addLog(`   ${target.name} ficou com ${target.currentHp}/${target.hp} HP`);
+        
+        if (target.currentHp <= 0) {
+          addLog(`💀 ${target.name} foi derrotado!`);
+        }
+        
+        renderBattle();
+        
+        if (!checkBattleEnd()) {
+          setTimeout(() => {
+            endTurn();
+          }, 500);
+        }
+      }
+    }
+
+    function useAbility(ability, isFromWarrior = false) {
+      const { playerWarriors, enemyWarriors } = AppState.currentBattle;
+      const limit = AppState.abilityUseLimit || 1;
+      if (AppState.currentBattle.playerAbilityUses >= limit) {
+        showMessage('❌ Limite de habilidades por turno atingido!');
+        return;
+      }
+      
+      const energyCost = ability.energyCost || 0;
+      
+      if (AppState.playerEnergy < energyCost) {
+        showMessage(`❌ Energia insuficiente! Precisa de ${energyCost} de energia.`);
+        return;
+      }
+      
+      if (ability.effectType === 'heal') {
+        showTargetSelectionForAbility(ability, playerWarriors.filter(w => w.currentHp > 0 && w.currentHp < w.hp), 'ally');
+      } else if (ability.effectType === 'damage') {
+        showTargetSelectionForAbility(ability, enemyWarriors.filter(w => w.currentHp > 0), 'enemy');
+      } else if (ability.effectType === 'poison' || ability.effectType === 'burn' || ability.effectType === 'paralyze' || ability.effectType === 'sleep' || ability.effectType === 'confuse') {
+        showTargetSelectionForAbility(ability, enemyWarriors.filter(w => w.currentHp > 0), 'status_effect');
+      } else if (ability.effectType === 'cure_effects') {
+        const affectedAllies = playerWarriors.filter(w => w.currentHp > 0 && w.statusEffects && w.statusEffects.length > 0);
+        showTargetSelectionForAbility(ability, affectedAllies, 'cure');
+      } else if (ability.effectType === 'area_damage') {
+        AppState.playerEnergy -= energyCost;
+        const aliveEnemies = enemyWarriors.filter(w => w.currentHp > 0);
+        aliveEnemies.forEach(enemy => {
+          const dealt = applyShieldAndDealDamage(enemy, ability.value);
+          if (enemy.currentHp <= 0) {
+            addLog(`💀 ${enemy.name} foi derrotado!`);
+          }
+        });
+        addLog(`     ${ability.name} (-⚡${energyCost}) causou ${ability.value} de dano em TODOS os inimigos!`);
+        AppState.currentBattle.playerAbilityUses++;
+        if (!isFromWarrior) removeAbilityFromBattle(ability);
+        renderBattle();
+        checkBattleEnd();
+      } else if (ability.effectType === 'area_heal') {
+        AppState.playerEnergy -= energyCost;
+        const injuredAllies = playerWarriors.filter(w => w.currentHp > 0 && w.currentHp < w.hp);
+        injuredAllies.forEach(ally => {
+          const healAmount = ability.value;
+          ally.currentHp = Math.min(ally.hp, ally.currentHp + healAmount);
+          addLog(`   ${ally.name} foi curado em ${healAmount} HP!`);
+        });
+        addLog(`💝 ${ability.name} (-⚡${energyCost}) curou TODOS os guerreiros aliados!`);
+        AppState.currentBattle.playerAbilityUses++;
+        removeAbilityFromBattle(ability);
+        renderBattle();
+        checkBattleEnd();
+      } else if (ability.effectType === 'revive') {
+        const deadAllies = playerWarriors.filter(w => w.currentHp === 0);
+        showTargetSelectionForAbility(ability, deadAllies, 'revive');
+      } else if (ability.effectType === 'energy') {
+        AppState.playerEnergy -= energyCost;
+        const energyGained = ability.value;
+        AppState.playerEnergy = Math.min(AppState.maxEnergy, AppState.playerEnergy + energyGained);
+        addLog(`⚡ ${ability.name} (-⚡${energyCost}) concedeu ${energyGained} de energia!`);
+        addLog(`   Energia atual: ${AppState.playerEnergy}/${AppState.maxEnergy}`);
+        AppState.currentBattle.playerAbilityUses++;
+        removeAbilityFromBattle(ability);
+        renderBattle();
+      } else if (['poison','burn','paralyze','sleep','confuse','vulnerability','weaken','silence','mark','freeze'].includes(ability.effectType)) {
+        showTargetSelectionForAbility(ability, enemyWarriors.filter(w => w.currentHp > 0), 'status_effect');
+      } else if (['thorns','haste','crit_boost','taunt','redirect'].includes(ability.effectType)) {
+        showTargetSelectionForAbility(ability, playerWarriors.filter(w => w.currentHp > 0), 'status_buff');
+      } else if (ability.effectType === 'lifesteal') {
+        showTargetSelectionForAbility(ability, enemyWarriors.filter(w => w.currentHp > 0), 'lifesteal');
+      } else if (ability.effectType === 'armor_break') {
+        showTargetSelectionForAbility(ability, enemyWarriors.filter(w => w.currentHp > 0), 'armor_break');
+      } else if (ability.effectType === 'team_shield') {
+        AppState.playerEnergy -= energyCost;
+        playerWarriors.filter(w => w.currentHp > 0).forEach(a => {
+          if (!a.statusEffects) a.statusEffects = [];
+          a.statusEffects.push({ type: 'shield', duration: ability.duration || 3, value: ability.value, icon: '🛡️' });
+        });
+        addLog(`🛡️ ${ability.name} (-⚡${energyCost}) concedeu escudo de ${ability.value} a TODOS os aliados por ${ability.duration || 3} turnos!`);
+        AppState.currentBattle.playerAbilityUses++;
+        removeAbilityFromBattle(ability);
+        renderBattle();
+        checkBattleEnd();
+      } else if (ability.effectType === 'energy_drain') {
+        AppState.playerEnergy = Math.min(AppState.maxEnergy, AppState.playerEnergy + ability.value);
+        AppState.currentBattle.enemyEnergy = Math.max(0, AppState.currentBattle.enemyEnergy - ability.value);
+        addLog(`⚡ ${ability.name} (-⚡${energyCost}) drenou ${ability.value} de energia do inimigo!`);
+        AppState.currentBattle.playerAbilityUses++;
+        removeAbilityFromBattle(ability);
+        renderBattle();
+      } else if (ability.effectType === 'dispel') {
+        showTargetSelectionForAbility(ability, playerWarriors.filter(w => w.currentHp > 0), 'dispel');
+      } else if (ability.effectType === 'shield') {
+        showTargetSelectionForAbility(ability, playerWarriors.filter(w => w.currentHp > 0), 'shield');
+      }
+    }
+
+    function removeAbilityFromBattle(ability) {
+      const index = AppState.currentBattle.playerAbilities.findIndex(a => a.id === ability.id);
+      if (index !== -1) {
+        AppState.currentBattle.playerAbilities.splice(index, 1);
+      }
+    }
+
+    function showTargetSelectionForAbility(ability, targets, targetType) {
+      if (targets.length === 0) {
+        if (targetType === 'ally') {
+          showMessage('❌ Nenhum guerreiro precisa de cura!');
+        } else if (targetType === 'enemy') {
+          showMessage('❌ Nenhum inimigo disponível!');
+        } else if (targetType === 'revive') {
+          showMessage('❌ Nenhum guerreiro morto para reviver!');
+        } else if (targetType === 'status_effect') {
+          showMessage('❌ Nenhum inimigo disponível!');
+        } else if (targetType === 'cure') {
+          showMessage('❌ Nenhum aliado com efeitos negativos!');
+        }
+        return;
+      }
+
+      const modal = document.createElement('div');
+      modal.className = 'custom-modal';
+      
+      let titleText = '';
+      if (targetType === 'ally') titleText = `💚 Escolha quem curar com ${ability.name}`;
+      else if (targetType === 'enemy') titleText = `💥 Escolha quem atacar com ${ability.name}`;
+      else if (targetType === 'revive') titleText = `💫 Escolha quem reviver com ${ability.name}`;
+      else if (targetType === 'status_effect') titleText = `🎯 Escolha o alvo para ${ability.name}`;
+      else if (targetType === 'cure') titleText = `✨ Escolha quem curar efeitos com ${ability.name}`;
+      
+      modal.innerHTML = `
+        <div class="custom-modal-content" style="max-width: 700px;">
+          <h3 style="margin: 0 0 15px 0;">${titleText}</h3>
+          <div id="ability-target-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin: 10px 0; padding: 10px; max-height: 500px; overflow-y: auto;"></div>
+          <button class="btn btn-secondary" id="cancel-ability-target">❌ Cancelar</button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      const grid = document.getElementById('ability-target-grid');
+      
+      targets.forEach(target => {
+        const card = document.createElement('div');
+        card.style.cssText = `cursor: pointer; border: 3px solid transparent; border-radius: 8px; transition: all 0.2s; background: rgba(${targetType === 'enemy' ? '231, 76, 60' : '78, 205, 196'}, 0.2); padding: 5px;`;
+        
+        const preview = document.createElement('div');
+        Renderer.renderWarriorCard(target, preview);
+        card.appendChild(preview.firstChild);
+        
+        card.addEventListener('mouseenter', () => {
+          card.style.border = `3px solid ${targetType === 'enemy' ? '#e74c3c' : '#4ecdc4'}`;
+          card.style.background = `rgba(${targetType === 'enemy' ? '231, 76, 60' : '78, 205, 196'}, 0.4)`;
+          card.style.transform = 'translateY(-3px)';
+          card.style.boxShadow = `0 5px 15px rgba(${targetType === 'enemy' ? '231, 76, 60' : '78, 205, 196'}, 0.6)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.border = '3px solid transparent';
+          card.style.background = `rgba(${targetType === 'enemy' ? '231, 76, 60' : '78, 205, 196'}, 0.2)`;
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = 'none';
+        });
+        
+        card.addEventListener('click', () => {
+          modal.remove();
+          executeAbilityOnTarget(ability, target, targetType);
+        });
+        
+        grid.appendChild(card);
+      });
+      
+      document.getElementById('cancel-ability-target').onclick = () => modal.remove();
+      modal.onclick = (e) => {
+        if (e.target === modal) modal.remove();
+      };
+    }
+
+    function executeAbilityOnTarget(ability, target, targetType) {
+      const energyCost = ability.energyCost || 1;
+      AppState.playerEnergy -= energyCost;
+      
+      if (targetType === 'ally') {
+        const healAmount = ability.value;
+        target.currentHp = Math.min(target.hp, target.currentHp + healAmount);
+        addLog(`💚 ${ability.name} (-⚡${energyCost}) curou ${target.name} em ${healAmount} HP!`);
+        addLog(`   ${target.name} agora tem ${target.currentHp}/${target.hp} HP`);
+      } else if (targetType === 'enemy') {
+        const dealt = applyShieldAndDealDamage(target, ability.value);
+        addLog(`💥 ${ability.name} (-⚡${energyCost}) causou ${dealt} de dano em ${target.name}!`);
+        addLog(`   ${target.name} ficou com ${target.currentHp}/${target.hp} HP`);
+        if (target.currentHp <= 0) {
+          addLog(`💀 ${target.name} foi derrotado!`);
+        }
+      } else if (targetType === 'revive') {
+        target.currentHp = Math.floor(target.hp * (ability.value / 100));
+        addLog(`💫 ${ability.name} (-⚡${energyCost}) reviveu ${target.name} com ${target.currentHp} HP!`);
+      } else if (targetType === 'status_effect') {
+        if (!target.statusEffects) target.statusEffects = [];
+        
+        const effectIcons = {
+          poison: '🧪',
+          burn: '🔥',
+          paralyze: '⛓️',
+          sleep: '💤',
+          confuse: '🌀'
+        };
+        
+        const effectNames = {
+          poison: 'Envenenado',
+          burn: 'Queimado',
+          paralyze: 'Paralisado',
+          sleep: 'Adormecido',
+          confuse: 'Confuso'
+        };
+        
+        target.statusEffects.push({
+          type: ability.effectType,
+          duration: ability.duration || 3,
+          value: ability.value,
+          icon: effectIcons[ability.effectType] || '❓'
+        });
+        
+        addLog(`${effectIcons[ability.effectType]} ${ability.name} (-⚡${energyCost}) aplicou ${effectNames[ability.effectType]} em ${target.name}!`);
+        addLog(`   Dura    o: ${ability.duration || 3} turnos`);
+      } else if (targetType === 'cure' || targetType === 'dispel') {
+        if (!target.statusEffects || target.statusEffects.length === 0) {
+          addLog(`✨ ${ability.name} (-⚡${energyCost}) não encontrou efeitos para remover em ${target.name}.`);
+        } else {
+          const isAlly = AppState.currentBattle.playerWarriors.some(w => w.id === target.id);
+          const negative = ['poison','burn','paralyze','sleep','confuse','vulnerability','weaken','mark','freeze'];
+          const positive = ['shield','haste','crit_boost','thorns','taunt','redirect'];
+          const toRemove = targetType === 'dispel' ? (isAlly ? negative : positive) : negative;
+          const removed = target.statusEffects.filter(e => toRemove.includes(e.type)).map(e => e.icon).join(' ');
+          target.statusEffects = target.statusEffects.filter(e => !toRemove.includes(e.type));
+          addLog(`✨ ${ability.name} (-⚡${energyCost}) removeu efeitos de ${target.name}! ${removed}`);
+        }
+      } else if (targetType === 'shield') {
+        if (!target.statusEffects) target.statusEffects = [];
+        target.statusEffects.push({ type: 'shield', duration: ability.duration || 3, value: ability.value, icon: '🛡️' });
+        addLog(`🛡️ ${ability.name} (-⚡${energyCost}) concedeu escudo de ${ability.value} a ${target.name} por ${ability.duration || 3} turnos!`);
+      } else if (targetType === 'status_effect' || targetType === 'status_buff') {
+        if (!target.statusEffects) target.statusEffects = [];
+        target.statusEffects.push({ type: ability.effectType, duration: ability.duration || 3, value: ability.value, icon: ability.icon || '✨' });
+        addLog(`✨ ${ability.name} (-⚡${energyCost}) aplicou ${ability.effectType} em ${target.name} por ${ability.duration || 3} turnos!`);
+      } else if (targetType === 'lifesteal') {
+        const dealt = applyShieldAndDealDamage(target, ability.value);
+        const allies = AppState.currentBattle.playerWarriors.filter(w => w.currentHp > 0 && w.currentHp < w.hp);
+        if (allies.length) {
+          const healTarget = allies.sort((a,b)=> (a.hp - a.currentHp) - (b.hp - b.currentHp))[0];
+          const healAmount = Math.min(dealt, ability.value);
+          healTarget.currentHp = Math.min(healTarget.hp, healTarget.currentHp + healAmount);
+          addLog(`🩸 ${ability.name} (-⚡${energyCost}) drenou ${dealt} e curou ${healTarget.name} em ${healAmount} HP!`);
+        } else {
+          addLog(`🩸 ${ability.name} (-⚡${energyCost}) drenou ${dealt} de ${target.name}!`);
+        }
+      } else if (targetType === 'armor_break') {
+        if (target.statusEffects && target.statusEffects.length) {
+          const before = target.statusEffects.length;
+          target.statusEffects = target.statusEffects.filter(e => e.type !== 'shield');
+          const removed = before - target.statusEffects.length;
+          addLog(`🪓 ${ability.name} (-⚡${energyCost}) removeu ${removed} escudo(s) de ${target.name}!`);
+        }
+      }
+      
+      AppState.currentBattle.playerAbilityUses++;
+      AppState.currentBattle.playerAbilityUses++;
+      removeAbilityFromBattle(ability);
+      renderBattle();
+      checkBattleEnd();
+    }
+
+    function checkBattleEnd() {
+      const { playerWarriors, enemyWarriors } = AppState.currentBattle;
+      const enemiesAlive = enemyWarriors.filter(w => w.currentHp > 0).length;
+      const playersAlive = playerWarriors.filter(w => w.currentHp > 0).length;
+      
+      if (enemiesAlive === 0) {
+        addLog('');
+        addLog('🎉 VOCÊ VENCEU A BATALHA!');
+        showMessage('🎉 VOCÊ VENCEU!');
+        document.getElementById('end-turn-btn').disabled = true;
+        return true;
+      } else if (playersAlive === 0) {
+        addLog('');
+        addLog('💀 VOCÊ FOI DERROTADO!');
+        showMessage('    DERROTA!');
+        document.getElementById('end-turn-btn').disabled = true;
+        return true;
+      }
+      return false;
+    }
+
+    function enemyTurn() {
+      const { playerWarriors, enemyWarriors, enemyAbilities, enemyEnergy } = AppState.currentBattle;
+      AppState.currentBattle.enemyAbilityUses = 0;
+      
+      addLog('');
+      addLog('🤖 Turno do Inimigo...');
+      
+      const limit = AppState.abilityUseLimit || 2;
+      setTimeout(() => {
+        const aliveEnemies = enemyWarriors.filter(w => w.currentHp > 0);
+        const alivePlayers = playerWarriors.filter(w => w.currentHp > 0);
+        
+        const useAbilityChance = Math.random() < 0.3 && enemyAbilities.length > 0 && AppState.currentBattle.enemyAbilityUses < limit;
+        
+        if (useAbilityChance) {
+          const affordableAbilities = enemyAbilities.filter(a => AppState.currentBattle.enemyEnergy >= (a.energyCost || 1));
+          
+          if (affordableAbilities.length > 0) {
+            const ability = affordableAbilities[Math.floor(Math.random() * affordableAbilities.length)];
+            const abilityCost = ability.energyCost || 1;
+            AppState.currentBattle.enemyEnergy -= abilityCost;
+            
+            if (ability.effectType === 'heal') {
+            const injuredEnemies = aliveEnemies.filter(w => w.currentHp < w.hp);
+              if (injuredEnemies.length > 0) {
+                const target = injuredEnemies[Math.floor(Math.random() * injuredEnemies.length)];
+                const healAmount = ability.value;
+                target.currentHp = Math.min(target.hp, target.currentHp + healAmount);
+                addLog(`💚 Inimigo usou ${ability.name} (-⚡${abilityCost}) para curar ${target.name} em ${healAmount} HP!`);
+                addLog(`   ${target.name} agora tem ${target.currentHp}/${target.hp} HP`);
+              }
+            } else if (ability.effectType === 'damage') {
+              if (alivePlayers.length > 0) {
+                const taunted = alivePlayers.filter(w => (w.statusEffects||[]).some(e => e.type === 'taunt'));
+                const pool = taunted.length ? taunted : alivePlayers;
+                const target = pool[Math.floor(Math.random() * pool.length)];
+                const dealt = applyShieldAndDealDamage(target, ability.value);
+                addLog(`    Inimigo usou ${ability.name} (-⚡${abilityCost}) causando ${dealt} de dano em seu ${target.name}!`);
+                addLog(`   Seu ${target.name} ficou com ${target.currentHp}/${target.hp} HP`);
+                if (target.currentHp <= 0) {
+                  addLog(`💀 Seu ${target.name} foi derrotado!`);
+                }
+              }
+            } else if (ability.effectType === 'area_damage') {
+              alivePlayers.forEach(player => {
+                const dealt = applyShieldAndDealDamage(player, ability.value);
+                if (player.currentHp <= 0) {
+                  addLog(`💀 Seu ${player.name} foi derrotado!`);
+                }
+              });
+              addLog(`   Inimigo usou ${ability.name} (-⚡${abilityCost}) causando ${ability.value} de dano em TODOS os seus guerreiros!`);
+            } else if (ability.effectType === 'area_heal') {
+              const injuredEnemies = aliveEnemies.filter(w => w.currentHp < w.hp);
+              injuredEnemies.forEach(enemy => {
+                const healAmount = ability.value;
+                enemy.currentHp = Math.min(enemy.hp, enemy.currentHp + healAmount);
+                addLog(`   ${enemy.name} foi curado em ${healAmount} HP!`);
+              });
+              addLog(`💝 Inimigo usou ${ability.name} (-⚡${abilityCost}) para curar TODOS os guerreiros!`);
+            } else if (ability.effectType === 'revive') {
+              const deadEnemies = enemyWarriors.filter(w => w.currentHp === 0);
+              if (deadEnemies.length > 0) {
+                const target = deadEnemies[Math.floor(Math.random() * deadEnemies.length)];
+                target.currentHp = Math.floor(target.hp * (ability.value / 100));
+                addLog(`   Inimigo usou ${ability.name} (-⚡${abilityCost}) e reviveu ${target.name} com ${target.currentHp} HP!`);
+              }
+            } else if (ability.effectType === 'energy') {
+              AppState.currentBattle.enemyEnergy = Math.min(AppState.maxEnergy, AppState.currentBattle.enemyEnergy + ability.value);
+              addLog(`⚡ Inimigo usou ${ability.name} (-⚡${abilityCost}) e ganhou ${ability.value} de energia!`);
+            } else if (ability.effectType === 'shield') {
+              addLog(`🛡️ Inimigo usou ${ability.name} (-⚡${abilityCost})! (Sistema de escudo em desenvolvimento)`);
+            }
+            
+            const index = enemyAbilities.findIndex(a => a.id === ability.id);
+            if (index !== -1) {
+              enemyAbilities.splice(index, 1);
+            }
+            
+            AppState.currentBattle.enemyAbilityUses++;
+            AppState.currentBattle.enemyAbilityUses++;
+            renderBattle();
+            if (checkBattleEnd()) return;
+          }
+        }
+        
+        if (aliveEnemies.length > 0 && alivePlayers.length > 0) {
+          const availableAttackers = aliveEnemies.filter(enemy => {
+            return enemy.attacks.some(attack => {
+              const energyCost = attack.energy || 1;
+              return AppState.currentBattle.enemyEnergy >= energyCost;
+            });
+          });
+          
+          if (availableAttackers.length > 0) {
+            const attacker = availableAttackers[Math.floor(Math.random() * availableAttackers.length)];
+            
+            const affordableAttacks = attacker.attacks.filter(attack => {
+              const energyCost = attack.energy || 1;
+              return AppState.currentBattle.enemyEnergy >= energyCost;
+            });
+            
+            const attack = affordableAttacks[Math.floor(Math.random() * affordableAttacks.length)];
+            const energyCost = attack.energy || 1;
+            
+            AppState.currentBattle.enemyEnergy -= energyCost;
+            
+            const taunted = alivePlayers.filter(w => (w.statusEffects||[]).some(e => e.type === 'taunt'));
+            const pool = taunted.length ? taunted : alivePlayers;
+            const target = pool[Math.floor(Math.random() * pool.length)];
+            
+            let damage = attack.damage;
+            if (target.weakness && target.weakness === attacker.type) {
+              damage += 20;
+              addLog(`⚠️ SUPER EFETIVO contra você! +20 de dano!`);
+            }
+            
+            const dealt = applyShieldAndDealDamage(target, damage);
+            
+            addLog(`    ${attacker.name} usou ${attack.name} (-⚡${energyCost}) causando ${dealt} de dano em seu ${target.name}!`);
+            addLog(`   Seu ${target.name} ficou com ${target.currentHp}/${target.hp} HP`);
+            
+            if (target.currentHp <= 0) {
+              addLog(`   Seu ${target.name} foi derrotado!`);
+            }
+            
+            renderBattle();
+            if (checkBattleEnd()) return;
+          } else {
+            addLog(`⚠️ Inimigo não tem energia suficiente para atacar!`);
+          }
+        }
+        
+        setTimeout(() => {
+          addLog('');
+          addLog('⏱️ Processando efeitos de estado inimigos...');
+          processStatusEffects(AppState.currentBattle.enemyWarriors, false);
+          
+          renderBattle();
+          
+          if (checkBattleEnd()) return;
+          
+          AppState.playerEnergy = Math.min(AppState.maxEnergy, AppState.playerEnergy + 1);
+          AppState.currentBattle.enemyEnergy = Math.min(AppState.maxEnergy, AppState.currentBattle.enemyEnergy + 1);
+          AppState.currentBattle.playerAbilityUses = 0;
+          addLog('');
+          addLog('🎲 Seu turno! +1 de energia');
+          document.getElementById('turn-indicator').textContent = '🎲 SEU TURNO - Clique nos seus guerreiros para atacar!';
+          renderBattle();
+        }, 1500);
+      }, 1500);
+    }
+
+    function processStatusEffects(warriors, isPlayer = true) {
+      warriors.forEach(warrior => {
+        if (!warrior.statusEffects || warrior.statusEffects.length === 0 || warrior.currentHp <= 0) return;
+        
+        const newEffects = [];
+        
+        warrior.statusEffects.forEach(effect => {
+          const ownerLabel = isPlayer ? 'Seu' : '';
+          
+          if (effect.type === 'poison') {
+            warrior.currentHp = Math.max(0, warrior.currentHp - effect.value);
+            addLog(`   ${ownerLabel} ${warrior.name} sofreu ${effect.value} de dano por veneno! (${warrior.currentHp}/${warrior.hp} HP)`);
+            if (warrior.currentHp <= 0) {
+              addLog(`💀 ${ownerLabel} ${warrior.name} foi derrotado pelo veneno!`);
+            }
+          } else if (effect.type === 'burn') {
+            warrior.currentHp = Math.max(0, warrior.currentHp - effect.value);
+            addLog(`🔥 ${ownerLabel} ${warrior.name} sofreu ${effect.value} de dano por queimadura! (${warrior.currentHp}/${warrior.hp} HP)`);
+            if (warrior.currentHp <= 0) {
+              addLog(`💀 ${ownerLabel} ${warrior.name} foi derrotado pela queimadura!`);
+            }
+          } else if (effect.type === 'paralyze') {
+            addLog(`⛓️ ${ownerLabel} ${warrior.name} está paralisado e não pode atacar!`);
+          } else if (effect.type === 'sleep') {
+            addLog(`💤 ${ownerLabel} ${warrior.name} está dormindo e não pode atacar!`);
+          } else if (effect.type === 'confuse') {
+            addLog(`🌀 ${ownerLabel} ${warrior.name} está confuso!`);
+          }
+          
+          effect.duration--;
+          
+          if (effect.duration > 0) {
+            newEffects.push(effect);
+          } else {
+            const effectNames = {
+              poison: 'veneno',
+              burn: 'queimadura',
+              paralyze: 'paralisia',
+              sleep: 'sono',
+              confuse: 'confusão',
+              shield: 'escudo'
+            };
+            addLog(`✨ ${ownerLabel} ${warrior.name} perdeu ${effectNames[effect.type]}!`);
+          }
+        });
+        
+        warrior.statusEffects = newEffects;
+      });
+    }
+
+    function endTurn() {
+      document.getElementById('turn-indicator').textContent = '🤖 TURNO DO INIMIGO';
+      
+      addLog('');
+      addLog('⏱️ Processando efeitos de estado...');
+      processStatusEffects(AppState.currentBattle.playerWarriors, true);
+      
+      renderBattle();
+      
+      if (checkBattleEnd()) return;
+      
+      enemyTurn();
+    }
+
+    function renderBattle() {
+      const { playerWarriors, enemyWarriors, playerAbilities, enemyAbilities } = AppState.currentBattle;
+
+      document.getElementById('player-energy').textContent = `${AppState.playerEnergy}/${AppState.maxEnergy}`;
+      document.getElementById('enemy-energy').textContent = `${AppState.currentBattle.enemyEnergy}/${AppState.maxEnergy}`;
+
+      const abilitiesContainer = document.getElementById('player-abilities');
+      document.getElementById('abilities-title').textContent = `✨ Habilidades (${playerAbilities.length}/5)`;
+      abilitiesContainer.innerHTML = '';
+      
+      if (playerAbilities.length === 0) {
+        abilitiesContainer.innerHTML = '<p style="color: #999; text-align: center; width: 100%;">Sem habilidades disponíveis</p>';
+      } else {
+        playerAbilities.forEach(ability => {
+          const energyCost = ability.energyCost !== undefined ? ability.energyCost : 1;
+          const costDisplay = energyCost === 0 ? 'SC' : `⚡${energyCost}`;
+          const canAfford = AppState.playerEnergy >= energyCost;
+          
+          const abilityCard = document.createElement('div');
+          abilityCard.className = 'ability-card-battle';
+          
+          if (!canAfford) {
+            abilityCard.style.opacity = '0.4';
+            abilityCard.style.cursor = 'not-allowed';
+          }
+          
+          let imageHTML = '';
+          if (ability.imageUrl) {
+            imageHTML = `<img src="${Renderer.escapeHtml(ability.imageUrl)}" alt="${Renderer.escapeHtml(ability.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                         <div style="display: none;">${Renderer.escapeHtml(ability.icon)}</div>`;
+          } else {
+            imageHTML = Renderer.escapeHtml(ability.icon);
+          }
+          
+          abilityCard.innerHTML = `
+            <div class="image-section">${imageHTML}</div>
+            <div class="info-section">
+              <div class="name">${Renderer.escapeHtml(ability.name)} <span style="color: #ffd93d;">${costDisplay}</span></div>
+              <div class="value">${ability.value}</div>
+            </div>
+          `;
+          abilityCard.addEventListener('mouseenter', () => {
+            showAbilityHoverInfo(ability, abilityCard);
+          });
+          abilityCard.addEventListener('mouseleave', hideBattleHoverInfo);
+          
+          if (canAfford) {
+            abilityCard.onclick = () => useAbility(ability);
+          } else {
+            abilityCard.onclick = () => showMessage(`❌ Energia insuficiente! Precisa de ${energyCost} de energia.`);
+          }
+          
+          abilitiesContainer.appendChild(abilityCard);
+        });
+      }
+
+      const enemyAbilitiesContainer = document.getElementById('enemy-abilities');
+      document.getElementById('enemy-abilities-title').textContent = `✨ Habilidades (${enemyAbilities.length}/5)`;
+      enemyAbilitiesContainer.innerHTML = '';
+      
+      if (enemyAbilities.length === 0) {
+        enemyAbilitiesContainer.innerHTML = '<p style="color: #999; text-align: center; width: 100%;">Sem habilidades disponíveis</p>';
+      } else {
+        enemyAbilities.forEach(ability => {
+          const abilityCard = document.createElement('div');
+          abilityCard.className = 'ability-card-battle';
+          abilityCard.style.cursor = 'default';
+          abilityCard.style.opacity = '0.9';
+          
+          let imageHTML = '';
+          if (ability.imageUrl) {
+            imageHTML = `<img src="${Renderer.escapeHtml(ability.imageUrl)}" alt="${Renderer.escapeHtml(ability.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                         <div style="display: none;">${Renderer.escapeHtml(ability.icon)}</div>`;
+          } else {
+            imageHTML = Renderer.escapeHtml(ability.icon);
+          }
+          
+          abilityCard.innerHTML = `
+            <div class="image-section">${imageHTML}</div>
+            <div class="info-section">
+              <div class="name">${Renderer.escapeHtml(ability.name)}</div>
+              <div class="value">${ability.value}</div>
+            </div>
+          `;
+          abilityCard.addEventListener('mouseenter', () => {
+            showAbilityHoverInfo(ability, abilityCard);
+          });
+          abilityCard.addEventListener('mouseleave', hideBattleHoverInfo);
+          
+          enemyAbilitiesContainer.appendChild(abilityCard);
+        });
+      }
+
+      const playerContainer = document.getElementById('player-warriors');
+      playerContainer.innerHTML = '';
+      
+      playerWarriors.forEach((warrior) => {
+        const card = document.createElement('div');
+        card.className = 'card-item';
+        if (warrior.currentHp <= 0) card.style.opacity = '0.3';
+        
+        const preview = document.createElement('div');
+        Renderer.renderWarriorCard(warrior, preview);
+        card.appendChild(preview.firstChild);
+
+          const abilityNodes = card.querySelectorAll('.warrior-ability-item');
+          abilityNodes.forEach(node => {
+            node.style.cursor = 'pointer';
+            node.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const abilityId = node.dataset.abilityId;
+              const ability = (warrior.abilities || []).find(a => a.id === abilityId);
+              if (ability) {
+                useAbility(ability, true);
+              }
+            });
+          });
+        
+          card.addEventListener('mouseenter', () => {
+            showBattleHoverInfo(warrior, card);
+          });
+          card.addEventListener('mouseleave', hideBattleHoverInfo);
+          
+          if (warrior.currentHp > 0 && warrior.attacks && warrior.attacks.length > 0) {
+            card.addEventListener('click', () => {
+              showAttackModal(warrior);
+            });
+          }
+          
+          playerContainer.appendChild(card);
+      });
+
+      const enemyContainer = document.getElementById('enemy-warriors');
+      enemyContainer.innerHTML = '';
+      
+      enemyWarriors.forEach(warrior => {
+        const card = document.createElement('div');
+        card.className = 'card-item';
+        if (warrior.currentHp <= 0) card.style.opacity = '0.3';
+        
+        const preview = document.createElement('div');
+        Renderer.renderWarriorCard(warrior, preview);
+        card.appendChild(preview.firstChild);
+        
+        card.addEventListener('mouseenter', () => {
+          showBattleHoverInfo(warrior, card);
+        });
+        card.addEventListener('mouseleave', hideBattleHoverInfo);
+        
+        enemyContainer.appendChild(card);
+      });
+    }
+
+    function addLog(message) {
+      const log = document.getElementById('battle-log');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      entry.textContent = message;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function exitBattle() {
+      // Voltar ao app principal e ocultar sala de batalha
+      document.getElementById('battle-room').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      
+      AppState.currentBattle = null;
+      document.getElementById('battle-log').innerHTML = '';
+      document.getElementById('end-turn-btn').disabled = false;
+      
+      // Voltar para aba de coleção
+      switchTab('collection');
+    }
+
+    async function initializeSDK() {
+      if (!window.elementSdk) return;
+
+      const element = {
+        defaultConfig: defaultConfig,
+        onConfigChange: async (config) => {
+          document.getElementById('game-title').textContent = config.game_title || defaultConfig.game_title;
+          document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+
+          const primaryColor = config.primary_color || defaultConfig.primary_color;
+          const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+          const backgroundColor = config.background_color || defaultConfig.background_color;
+          const textColor = config.text_color || defaultConfig.text_color;
+          const customFont = config.font_family || defaultConfig.font_family;
+          const baseSize = config.font_size || defaultConfig.font_size;
+
+          document.body.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, #1a1a2e 100%)`;
+          document.body.style.color = textColor;
+          document.body.style.fontFamily = `${customFont}, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`;
+          document.body.style.fontSize = `${baseSize}px`;
+
+          document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.style.background = primaryColor;
+          });
+
+          document.querySelectorAll('.nav-tab.active').forEach(tab => {
+            tab.style.background = secondaryColor;
+            tab.style.borderColor = secondaryColor;
+          });
+
+          document.querySelectorAll('h1').forEach(h => {
+            h.style.fontSize = `${baseSize * 2.5}px`;
+          });
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.surface_color = value;
+                  window.elementSdk.setConfig({ surface_color: value });
+                }
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.primary_color = value;
+                  window.elementSdk.setConfig({ primary_color: value });
+                }
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.secondary_color = value;
+                  window.elementSdk.setConfig({ secondary_color: value });
+                }
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              if (window.elementSdk && window.elementSdk.config) {
+                window.elementSdk.config.font_family = value;
+                window.elementSdk.setConfig({ font_family: value });
+              }
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              if (window.elementSdk && window.elementSdk.config) {
+                window.elementSdk.config.font_size = value;
+                window.elementSdk.setConfig({ font_size: value });
+              }
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['game_title', config.game_title || defaultConfig.game_title],
+          ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+        ])
+      };
+
+      window.elementSdk.init(element);
+    }
+
+    function createSampleCards() {
+      if (AppState.warriors.length === 0 && AppState.abilities.length === 0) {
+        // Criar 5 Habilidades (incluindo custo 0!)
+        AppState.abilities = [
+          new AbilityCard({
+            name: 'Bandagem Rápida',
+            effectType: 'heal',
+            value: 20,
+            energyCost: 0,
+            icon: '💚',
+            duration: 3
+          }),
+          new AbilityCard({
+            name: 'Bola de Fogo',
+            effectType: 'damage',
+            value: 40,
+            energyCost: 2,
+            icon: '🔥',
+            duration: 3
+          }),
+          new AbilityCard({
+            name: 'Veneno Mortal',
+            effectType: 'poison',
+            value: 15,
+            energyCost: 2,
+            duration: 4,
+            icon: '🧪'
+          }),
+          new AbilityCard({
+            name: 'Cura em   rea',
+            effectType: 'area_heal',
+            value: 30,
+            energyCost: 3,
+            icon: '  ',
+            duration: 3
+          }),
+          new AbilityCard({
+            name: 'Reviver Aliado',
+            effectType: 'revive',
+            value: 50,
+            energyCost: 3,
+            icon: '💫',
+            duration: 3
+          })
+        ];
+
+        // Criar 5 Guerreiros
+        AppState.warriors = [
+          new WarriorCard({
+            name: 'Dragão de Fogo',
+            hp: 150,
+            type: 'Fogo',
+            weakness: 'Água',
+            attacks: [
+              { name: 'Chamas', damage: 30, energy: 0 },
+              { name: 'Meteoro', damage: 60, energy: 2 }
+            ],
+            abilities: [],
+            bgColor: '#ff6b6b',
+            borderColor: '#e74c3c'
+          }),
+          new WarriorCard({
+            name: 'Leviatã Aquático',
+            hp: 140,
+            type: 'Água',
+            weakness: 'Elétrico',
+            attacks: [
+              { name: 'Jato d\'Água', damage: 25, energy: 0 },
+              { name: 'Tsunami', damage: 55, energy: 2 }
+            ],
+            abilities: [],
+            bgColor: '#4ecdc4',
+            borderColor: '#3498db'
+          }),
+          new WarriorCard({
+            name: 'Golem de Pedra',
+            hp: 180,
+            type: 'Terra',
+            weakness: 'Natureza',
+            attacks: [
+              { name: 'Soco Rochoso', damage: 20, energy: 0 },
+              { name: 'Terremoto', damage: 50, energy: 2 }
+            ],
+            abilities: [],
+            bgColor: '#a0522d',
+            borderColor: '#8b4513'
+          }),
+          new WarriorCard({
+            name: 'Águia Trovão',
+            hp: 120,
+            type: 'Elétrico',
+            weakness: 'Terra',
+            attacks: [
+              { name: 'Choque', damage: 35, energy: 1 },
+              { name: 'Raio Devastador', damage: 70, energy: 3 }
+            ],
+            abilities: [],
+            bgColor: '#ffd93d',
+            borderColor: '#f39c12'
+          }),
+          new WarriorCard({
+            name: 'Espírito das Trevas',
+            hp: 130,
+            type: 'Trevas',
+            weakness: 'Luz',
+            attacks: [
+              { name: 'Sombra Cortante', damage: 40, energy: 1 },
+              { name: 'Vazio Eterno', damage: 65, energy: 2 }
+            ],
+            abilities: [],
+            bgColor: '#2c3e50',
+            borderColor: '#34495e'
+          })
+        ];
+
+        saveToLocalStorage();
+        showMessage('    5 Guerreiros e 5 Habilidades criadas automaticamente!');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFromLocalStorage();
+      createSampleCards();
+      applyModeUi();
+
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.dataset.tab;
+          switchTab(tabId);
+        });
+      });
+
+      document.querySelectorAll('#editor .card-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const type = btn.dataset.type;
+          document.querySelectorAll('#editor .card-type-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          AppState.currentEditorType = type;
+          document.getElementById('warrior-form').style.display = type === 'warrior' ? 'block' : 'none';
+          document.getElementById('ability-form').style.display = type === 'ability' ? 'block' : 'none';
+          
+          if (type === 'warrior') {
+            updateWarriorAbilitiesSelector();
+          }
+          
+          updatePreview();
+        });
+      });
+
+      ['warrior-name', 'warrior-hp', 'warrior-type', 'warrior-weakness', 'warrior-image', 'warrior-bg-color', 'warrior-border-color',
+       'attack1-name', 'attack1-damage', 'attack1-energy', 'attack2-name', 'attack2-damage', 'attack2-energy', 
+       'attack3-name', 'attack3-damage', 'attack3-energy', 'ability-name', 'ability-effect-type', 'ability-value', 'ability-energy-cost', 'ability-icon', 'ability-image'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', updatePreview);
+          el.addEventListener('change', updatePreview);
+        }
+      });
+
+      document.getElementById('upload-image-btn').addEventListener('click', () => {
+        document.getElementById('warrior-image-file').click();
+      });
+
+      document.getElementById('warrior-image-file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+          showMessage('   Por favor, selecione uma imagem válida!');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageData = event.target.result;
+          document.getElementById('warrior-image').value = imageData;
+          
+          const previewContainer = document.getElementById('image-preview-small');
+          const previewImg = document.getElementById('preview-img');
+          previewImg.src = imageData;
+          previewContainer.style.display = 'block';
+          
+          updatePreview();
+          showMessage('✅ Imagem carregada com sucesso!');
+        };
+        
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('warrior-image').addEventListener('input', () => {
+        const url = document.getElementById('warrior-image').value;
+        if (url) {
+          const previewContainer = document.getElementById('image-preview-small');
+          const previewImg = document.getElementById('preview-img');
+          previewImg.src = url;
+          previewContainer.style.display = 'block';
+        } else {
+          document.getElementById('image-preview-small').style.display = 'none';
+        }
+      });
+
+      document.getElementById('upload-ability-image-btn').addEventListener('click', () => {
+        document.getElementById('ability-image-file').click();
+      });
+
+      document.getElementById('ability-image-file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.startsWith('image/')) {
+          showMessage('    Por favor, selecione uma imagem válida!');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageData = event.target.result;
+          document.getElementById('ability-image').value = imageData;
+          
+          const previewContainer = document.getElementById('ability-image-preview-small');
+          const previewImg = document.getElementById('ability-preview-img');
+          previewImg.src = imageData;
+          previewContainer.style.display = 'block';
+          
+          updatePreview();
+          showMessage('✅ Imagem carregada com sucesso!');
+        };
+        
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('ability-image').addEventListener('input', () => {
+        const url = document.getElementById('ability-image').value;
+        if (url) {
+          const previewContainer = document.getElementById('ability-image-preview-small');
+          const previewImg = document.getElementById('ability-preview-img');
+          previewImg.src = url;
+          previewContainer.style.display = 'block';
+        } else {
+          document.getElementById('ability-image-preview-small').style.display = 'none';
+        }
+      });
+
+      document.getElementById('save-card-btn').addEventListener('click', saveCard);
+      document.getElementById('clear-editor-btn').addEventListener('click', clearEditor);
+
+      document.querySelectorAll('#collection .card-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter;
+          document.querySelectorAll('#collection .card-type-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          AppState.collectionFilter = filter;
+          refreshCollection();
+        });
+      });
+
+      document.getElementById('filter-name').addEventListener('input', refreshCollection);
+      document.getElementById('filter-type').addEventListener('change', refreshCollection);
+
+      document.getElementById('start-battle-btn').addEventListener('click', startBattle);
+      
+      // Botão de sair da batalha (sala separada)
+      const exitBattleRoomBtn = document.querySelector('#battle-room #exit-battle-btn');
+      if (exitBattleRoomBtn) {
+        exitBattleRoomBtn.addEventListener('click', exitBattle);
+      }
+      
+      const endTurnBtn = document.getElementById('end-turn-btn');
+      if (endTurnBtn) {
+        endTurnBtn.addEventListener('click', endTurn);
+      }
+
+      const exportBtn = document.getElementById('export-to-file');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          try {
+            const allCards = {
+              warriors: AppState.warriors,
+              abilities: AppState.abilities
+            };
+            
+            const dataStr = JSON.stringify(allCards, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const filename = `tcg-cards-${new Date().toISOString().split('T')[0]}.json`;
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.style.display = 'none';
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            setTimeout(() => {
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }, 100);
+            
+            showMessage(`📥 ${allCards.warriors.length + allCards.abilities.length} cartas baixadas!`);
+          } catch (error) {
+            showMessage('❌ Erro ao baixar arquivo!');
+            console.error('Erro no export:', error);
+          }
+        });
+      }
+
+      const importBtn = document.getElementById('import-from-file');
+      if (importBtn) {
+        importBtn.addEventListener('click', () => {
+          const fileInput = document.getElementById('import-file-input');
+          if (fileInput) {
+            fileInput.click();
+          }
+        });
+      }
+
+      const importFileInput = document.getElementById('import-file-input');
+      if (importFileInput) {
+        importFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.name.endsWith('.json')) {
+          showMessage('❌ Por favor, selecione um arquivo .json válido!');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const importedData = JSON.parse(event.target.result);
+            
+            if (!importedData.warriors || !importedData.abilities) {
+              showMessage('❌ Arquivo inválido! Formato não reconhecido.');
+              return;
+            }
+            
+            const confirmModal = document.createElement('div');
+            confirmModal.className = 'custom-modal';
+            confirmModal.innerHTML = `
+              <div class="custom-modal-content">
+                <h3 style="color: #4ecdc4;">📤 Importar Cartas?</h3>
+                <p>Foram encontradas:</p>
+                <p><strong>⚔   ${importedData.warriors.length} Guerreiros</strong></p>
+                <p><strong>✨ ${importedData.abilities.length} Habilidades</strong></p>
+                <p style="margin-top: 15px; color: #4ecdc4;">✅ Serão ADICIONADAS à sua coleção atual!</p>
+                <p style="color: #ffd93d;">Coleção atual: ${AppState.warriors.length} guerreiros + ${AppState.abilities.length} habilidades</p>
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                  <button class="btn btn-primary" id="confirm-import">✅ Adicionar</button>
+                  <button class="btn btn-secondary" id="cancel-import">      Cancelar</button>
+                </div>
+              </div>
+            `;
+            document.body.appendChild(confirmModal);
+            
+            document.getElementById('confirm-import').onclick = () => {
+              const newWarriors = importedData.warriors.map(w => new WarriorCard(w));
+              const newAbilities = importedData.abilities.map(a => new AbilityCard(a));
+              
+              AppState.warriors.push(...newWarriors);
+              AppState.abilities.push(...newAbilities);
+              
+              saveToLocalStorage();
+              refreshCollection();
+              updateStats();
+              updateWarriorAbilitiesSelector();
+              confirmModal.remove();
+              showMessage(`✅ ${newWarriors.length + newAbilities.length} cartas adicionadas! Total: ${AppState.warriors.length + AppState.abilities.length}`);
+              e.target.value = '';
+            };
+            
+            document.getElementById('cancel-import').onclick = () => {
+              confirmModal.remove();
+              e.target.value = '';
+            };
+            confirmModal.onclick = (evt) => {
+              if (evt.target === confirmModal) {
+                confirmModal.remove();
+                e.target.value = '';
+              }
+            };
+            
+          } catch (error) {
+            showMessage('❌ Erro ao ler o arquivo! Verifique se é um arquivo válido.');
+            e.target.value = '';
+          }
+        };
+        
+        reader.readAsText(file);
+        });
+      }
+
+      document.getElementById('reset-all').addEventListener('click', () => {
+        const confirmModal = document.createElement('div');
+        confirmModal.className = 'custom-modal';
+        confirmModal.innerHTML = `
+          <div class="custom-modal-content">
+            <h3 style="color: #e74c3c;">   ️ Resetar Tudo?</h3>
+            <p>Isso irá apagar TODAS as suas cartas permanentemente!</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+              <button class="btn btn-danger" id="confirm-reset">Sim, Resetar Tudo</button>
+              <button class="btn btn-secondary" id="cancel-reset">Cancelar</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmModal);
+        
+        document.getElementById('confirm-reset').onclick = () => {
+          AppState.warriors = [];
+          AppState.abilities = [];
+          saveToLocalStorage();
+          refreshCollection();
+          updateStats();
+          updateWarriorAbilitiesSelector();
+          confirmModal.remove();
+          showMessage('✅ Todas as cartas foram removidas!');
+        };
+        
+        document.getElementById('cancel-reset').onclick = () => confirmModal.remove();
+        confirmModal.onclick = (e) => {
+          if (e.target === confirmModal) confirmModal.remove();
+        };
+      });
+
+      updatePreview();
+      refreshCollection();
+      updateStats();
+      updateWarriorAbilitiesSelector();
+      initializeSDK();
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9acccb5dc1dfc6c1',t:'MTc2NTUzODAyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
